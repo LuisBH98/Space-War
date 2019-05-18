@@ -41,9 +41,13 @@ Spacewar.gameState.prototype = {
 				+ '_0' + (Math.floor(Math.random() * 6) + 1) + '.png'
 		game.global.myPlayer.image = game.add.sprite(0, 0, 'spacewar',
 				game.global.myPlayer.shipType)
+		//game.physics.enable(game.global.myPlayer.image,Phaser.Physics.ARCADE);
 		game.global.myPlayer.image.anchor.setTo(0.5, 0.5)
-		
-		
+		//game.global.myPlayer.image.body.setSize(100,100)
+		//game.global.myPlayer.image.body.bounce.x= 0
+		//game.global.myPlayer.image.body.bounce.y = 0
+		//game.global.myPlayer.image.body.collideWorldBounds = true;
+
 	},
 
 	create : function() {
@@ -68,20 +72,26 @@ Spacewar.gameState.prototype = {
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.W,
 				Phaser.Keyboard.S, Phaser.Keyboard.A, Phaser.Keyboard.D,
 				Phaser.Keyboard.SPACEBAR ]);
-		
+
 		// Player name
-		var style = {font:"20px Arial",fill:"#FFFFFF",align:"center"};
-		user_name = game.add.text(game.global.myPlayer.image.x, game.global.myPlayer.image.y-20,game.global.myPlayer.player_name,style)
-		user_name.anchor.setTo(0.5,0.5);
+		var style = {
+			font : "20px Arial",
+			fill : "#FFFFFF",
+			align : "center"
+		};
+		user_name = game.add.text(game.global.myPlayer.image.x,
+				game.global.myPlayer.image.y - 20,
+				game.global.myPlayer.player_name, style)
+		user_name.anchor.setTo(0.5, 0.5);
 
 		game.camera.follow(game.global.myPlayer.image);
 	},
 
 	update : function() {
-		
+
 		user_name.x = game.global.myPlayer.image.x;
-		user_name.y = game.global.myPlayer.image.y-20;
-		
+		user_name.y = game.global.myPlayer.image.y - 20;
+
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
 
@@ -94,7 +104,7 @@ Spacewar.gameState.prototype = {
 
 		msg.bullet = false
 
-		if (this.wKey.isDown)
+		if (this.wKey.isDown) 
 			msg.movement.thrust = true;
 		if (this.sKey.isDown)
 			msg.movement.brake = true;
