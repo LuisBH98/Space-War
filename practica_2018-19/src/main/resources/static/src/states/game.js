@@ -5,6 +5,8 @@ Spacewar.gameState = function(game) {
 	this.maxProjectiles = 800 // 8 per player
 }
 
+var user_name;
+
 Spacewar.gameState.prototype = {
 
 	init : function() {
@@ -40,6 +42,8 @@ Spacewar.gameState.prototype = {
 		game.global.myPlayer.image = game.add.sprite(0, 0, 'spacewar',
 				game.global.myPlayer.shipType)
 		game.global.myPlayer.image.anchor.setTo(0.5, 0.5)
+		
+		
 	},
 
 	create : function() {
@@ -64,11 +68,20 @@ Spacewar.gameState.prototype = {
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.W,
 				Phaser.Keyboard.S, Phaser.Keyboard.A, Phaser.Keyboard.D,
 				Phaser.Keyboard.SPACEBAR ]);
+		
+		// Player name
+		var style = {font:"20px Arial",fill:"#FFFFFF",align:"center"};
+		user_name = game.add.text(game.global.myPlayer.image.x, game.global.myPlayer.image.y-20,game.global.myPlayer.player_name,style)
+		user_name.anchor.setTo(0.5,0.5);
 
 		game.camera.follow(game.global.myPlayer.image);
 	},
 
 	update : function() {
+		
+		user_name.x = game.global.myPlayer.image.x;
+		user_name.y = game.global.myPlayer.image.y-20;
+		
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
 

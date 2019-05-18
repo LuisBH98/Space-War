@@ -38,8 +38,10 @@ window.onload = function() {
 			}
 			game.global.myPlayer.id = msg.id
 			game.global.myPlayer.shipType = msg.shipType
+			game.global.myPlayer.player_name = msg.player_name;
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
+				console.log('[DEBUG] Name assigned to player: ' + game.global.myPlayer.player_name);
 			}
 			break
 		case 'NEW ROOM' :
@@ -62,16 +64,22 @@ window.onload = function() {
 						game.global.myPlayer.image.x = player.posX
 						game.global.myPlayer.image.y = player.posY
 						game.global.myPlayer.image.angle = player.facingAngle
+						game.global.myPlayer.player_name = player.player_name;
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
 							game.global.otherPlayers[player.id] = {
 									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
 							}
+							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-20,player.player_name,{font:"20px Arial",fill:"#ffffff"})
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
+							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x;
+							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-20;
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
+							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x
+							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-20
 						}
 					}
 				}
