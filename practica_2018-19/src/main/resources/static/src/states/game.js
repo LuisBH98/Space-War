@@ -86,7 +86,7 @@ Spacewar.gameState.prototype = {
 		user_name.anchor.setTo(0.5, 0.5);
 		
 		//Player live
-		user_live = new Phaser.Rectangle(game.global.myPlayer.image.x,game.global.myPlayer.image.y-25,game.global.myPlayer.live,20)
+		user_live = new Phaser.Rectangle(game.global.myPlayer.image.x,game.global.myPlayer.image.y-25,100,20)
 
 		game.camera.follow(game.global.myPlayer.image);
 	},
