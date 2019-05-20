@@ -51,7 +51,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("live",player.getPlayerLive());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
-			case "JOIN ROOM":
+			case "JOIN ANY ROOM":
+				msg.put("event", "NEW ROOM");
+				msg.put("room", "GLOBAL");
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
+			case "JOIN SPECIFIC ROOM":
 				msg.put("event", "NEW ROOM");
 				msg.put("room", "GLOBAL");
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
