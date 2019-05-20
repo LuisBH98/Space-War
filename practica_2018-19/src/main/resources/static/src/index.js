@@ -73,11 +73,11 @@ window.onload = function() {
 							game.global.otherPlayers[player.id] = {
 									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
 							}
-							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-30,player.player_name,{font:"20px Arial",fill:"#ffffff"})
-							game.global.otherPlayers[player.id].live = new Phaser.Rectangle(player.posX,player.posY-25,player.live,10)
+							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-35,player.player_name,{font:"20px Arial",fill:"#ffffff"})
+							game.global.otherPlayers[player.id].live = new Phaser.Rectangle(player.posX,player.posY-30,player.live,10)
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
 							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x;
-							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-30;
+							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-35;
 							game.global.otherPlayers[player.id].live = game.global.otherPlayers[player.id].live;
 							
 						} else {
@@ -85,8 +85,8 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
 							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x
-							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-30
-							game.global.otherPlayers[player.id].live = game.global.otherPlayers[plaver.id].live;
+							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-35
+							game.global.otherPlayers[player.id].live = game.global.otherPlayers[player.id].live;
 						}
 					}
 				}
