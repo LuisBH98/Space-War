@@ -111,7 +111,8 @@ public class SpacewarGame {
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("player_name", player.getPlayerName());
-				jsonPlayer.put("live", player.getPlayerLive());
+				jsonPlayer.put("life", player.getPlayerLife());
+				jsonPlayer.put("ammo", player.getPlayerAmmo());
 				jsonPlayer.put("shipType", player.getShipType());
 				jsonPlayer.put("posX", player.getPosX());
 				jsonPlayer.put("posY", player.getPosY());
@@ -127,6 +128,7 @@ public class SpacewarGame {
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
+						player.setPlayerLife(player.getPlayerLife()-10);
 						projectile.setHit(true);
 						break;
 					}

@@ -29,7 +29,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("id", player.getPlayerId());
 		msg.put("shipType", player.getShipType());
 		msg.put("player_name", player.getPlayerName());
-		msg.put("live", player.getPlayerLive());
+		msg.put("life", player.getPlayerLife());
+		msg.put("ammo", player.getPlayerAmmo());
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
 		
 		game.addPlayer(player);
@@ -48,7 +49,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("id", player.getPlayerId());
 				msg.put("shipType", player.getShipType());
 				msg.put("player_name", player.getPlayerName());
-				msg.put("live",player.getPlayerLive());
+				msg.put("life",player.getPlayerLife());
+				msg.put("ammo", player.getPlayerAmmo());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN ANY ROOM":
@@ -67,6 +69,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						node.path("movement").get("rotLeft").asBoolean(),
 						node.path("movement").get("rotRight").asBoolean());
 				if (node.path("bullet").asBoolean()) {
+					player.setPlayerAmmo(player.getPlayerAmmo()-1);
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
 					game.addProjectile(projectile.getId(), projectile);
 				}
