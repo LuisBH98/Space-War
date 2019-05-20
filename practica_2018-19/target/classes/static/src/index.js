@@ -39,11 +39,11 @@ window.onload = function() {
 			game.global.myPlayer.id = msg.id
 			game.global.myPlayer.shipType = msg.shipType
 			game.global.myPlayer.player_name = msg.player_name;
-			game.global.myPlayer.live = msg.live;
+			game.global.myPlayer.life = msg.life;
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 				console.log('[DEBUG] Name assigned to player: ' + game.global.myPlayer.player_name);
-				console.log('[DEBUG] Player live set to: ' + game.global.myPlayer.live);
+				console.log('[DEBUG] Player life set to: ' + game.global.myPlayer.life);
 			}
 			break
 		case 'NEW ROOM' :
@@ -67,26 +67,25 @@ window.onload = function() {
 						game.global.myPlayer.image.y = player.posY
 						game.global.myPlayer.image.angle = player.facingAngle
 						game.global.myPlayer.player_name = player.player_name;
-						game.global.myPlayer.live = player.live;
+						game.global.myPlayer.life = player.life;
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
 							game.global.otherPlayers[player.id] = {
 									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
 							}
-							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-35,player.player_name,{font:"20px Arial",fill:"#ffffff"})
-							game.global.otherPlayers[player.id].live = new Phaser.Rectangle(player.posX,player.posY-30,player.live,10)
+							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-40,player.player_name,{font:"15px Arial",fill:"#ffffff"})
+							game.global.otherPlayers[player.id].player_name.anchor.setTo(0.5,0.5)
+							game.global.otherPlayers[player.id].life = game.add.text(player.posX,player.posY-30,"Life: " + player.life,{font:"15px Arial",fill:"#ffffff"})
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
-							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x;
-							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-35;
-							game.global.otherPlayers[player.id].live = game.global.otherPlayers[player.id].live;
 							
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
-							game.global.otherPlayers[player.id].player_name.x = game.global.otherPlayers[player.id].image.x
-							game.global.otherPlayers[player.id].player_name.y = game.global.otherPlayers[player.id].image.y-35
-							game.global.otherPlayers[player.id].live = game.global.otherPlayers[player.id].live;
+							game.global.otherPlayers[player.id].player_name.x = player.posX
+							game.global.otherPlayers[player.id].player_name.y = player.posY-40
+							game.global.otherPlayers[player.id].life.x = game.global.otherPlayers[player.id].image.x;
+							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-30;
 						}
 					}
 				}
