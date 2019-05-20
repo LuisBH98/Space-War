@@ -7,7 +7,11 @@ Spacewar.gameState = function(game) {
 
 var user_name;
 var user_live;
-var x, y;
+var user_ammo;
+var pos_nameY = 40
+var pos_lifeY = 25
+var pos_ammoX = 40
+var pos_ammoY = 35
 
 Spacewar.gameState.prototype = {
 
@@ -82,16 +86,26 @@ Spacewar.gameState.prototype = {
 			align : "center"
 		};
 		user_name = game.add.text(game.global.myPlayer.image.x,
-				game.global.myPlayer.image.y - 40,
+				game.global.myPlayer.image.y - pos_nameY,
 				game.global.myPlayer.player_name, style)
 		user_name.anchor.setTo(0.5, 0.5);
 
+		//Player life
 		user_life = game.add.text(game.global.myPlayer.image.x,
-				game.global.myPlayer.y - 35, "Life: " + game.global.myPlayer.life, 
+				game.global.myPlayer.y - pos_lifeY, "Life: " + game.global.myPlayer.life, 
 				{
 					font : "15px Arial",
 					fill : "#FFFFFF",
 					align : "center"
+				})
+		user_life.anchor.setTo(0.5,0.5)
+		
+		//Player ammo
+		user_ammo = game.add.text(game.global.myPlayer.image.x + pos_ammoX, game.global.myPlayer.y - pos_ammoY, "Ammo: " + game.global.myPlayer.ammo, 
+				{
+					font:"15px Arial",
+					fill:"#FFFFFF",
+					align:"center",
 				})
 
 		game.camera.follow(game.global.myPlayer.image);
@@ -101,15 +115,16 @@ Spacewar.gameState.prototype = {
 
 		// Update player name
 		user_name.x = game.global.myPlayer.image.x;
-		user_name.y = game.global.myPlayer.image.y - 40;
+		user_name.y = game.global.myPlayer.image.y - pos_nameY;
 
 		// Update player vida
 		user_life.x = game.global.myPlayer.image.x;
-		user_life.y = game.global.myPlayer.image.y - 30;
-		// user_live = new
-		// Phaser.Rectangle(game.global.myPlayer.image.x-50,game.global.myPlayer.image.y-30,
-		// game.global.myPlayer.live,10)
-		// game.debug.geom(user_live,'#1BFF00')
+		user_life.y = game.global.myPlayer.image.y - pos_lifeY;
+		
+		//Update player ammo
+		user_ammo.x = game.global.myPlayer.image.x + pos_ammoX;
+		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
+
 
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'

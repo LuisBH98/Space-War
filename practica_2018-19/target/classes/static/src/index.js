@@ -12,6 +12,10 @@ window.onload = function() {
 		projectiles : []
 	}
 
+	var pos_nameY = 40
+	var pos_lifeY = 25
+	var pos_ammoX = 40
+	var pos_ammoY = 35
 	// WEBSOCKET CONFIGURATOR
 	game.global.socket = new WebSocket("ws://127.0.0.1:8080/spacewar")
 	
@@ -40,6 +44,7 @@ window.onload = function() {
 			game.global.myPlayer.shipType = msg.shipType
 			game.global.myPlayer.player_name = msg.player_name;
 			game.global.myPlayer.life = msg.life;
+			game.global.myPlayer.ammo = msg.ammo;
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 				console.log('[DEBUG] Name assigned to player: ' + game.global.myPlayer.player_name);
@@ -68,24 +73,29 @@ window.onload = function() {
 						game.global.myPlayer.image.angle = player.facingAngle
 						game.global.myPlayer.player_name = player.player_name;
 						game.global.myPlayer.life = player.life;
+						game.global.myPlayer.ammo = player.ammo;
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
 							game.global.otherPlayers[player.id] = {
 									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
 							}
-							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-40,player.player_name,{font:"15px Arial",fill:"#ffffff"})
+							game.global.otherPlayers[player.id].player_name = game.add.text(player.posX,player.posY-pos_nameY,player.player_name,{font:"15px Arial",fill:"#ffffff"})
 							game.global.otherPlayers[player.id].player_name.anchor.setTo(0.5,0.5)
-							game.global.otherPlayers[player.id].life = game.add.text(player.posX,player.posY-30,"Life: " + player.life,{font:"15px Arial",fill:"#ffffff"})
+							game.global.otherPlayers[player.id].life = game.add.text(player.posX,player.posY-pos_lifeY,"Life: " + player.life,{font:"15px Arial",fill:"#ffffff"})
+							game.global.otherPlayers[player.id].life.anchor.setTo(0.5,0.5)
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
+							game.global.otherPlayers[player.id].ammo = game.add.text(player.posX+pos_ammoX,player.posY-pos_ammoY,"Ammo:" + player.ammo,{font:"15px Arial",fill:"#ffffff"})
 							
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
 							game.global.otherPlayers[player.id].player_name.x = player.posX
-							game.global.otherPlayers[player.id].player_name.y = player.posY-40
+							game.global.otherPlayers[player.id].player_name.y = player.posY-pos_nameY
 							game.global.otherPlayers[player.id].life.x = game.global.otherPlayers[player.id].image.x;
-							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-30;
+							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-pos_lifeY;
+							game.global.otherPlayers[player.id].ammo.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;
+							game.global.otherPlayers[player.id].ammo.y = game.global.otherPlayers[player.id].image.y-pos_ammoY;
 						}
 					}
 				}
