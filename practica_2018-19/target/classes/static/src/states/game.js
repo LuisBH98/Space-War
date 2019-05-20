@@ -118,10 +118,12 @@ Spacewar.gameState.prototype = {
 		user_name.y = game.global.myPlayer.image.y - pos_nameY;
 
 		// Update player vida
+		user_life.setText("Life: " + game.global.myPlayer.life);
 		user_life.x = game.global.myPlayer.image.x;
 		user_life.y = game.global.myPlayer.image.y - pos_lifeY;
 		
 		//Update player ammo
+		user_ammo.setText("Ammo: "+ game.global.myPlayer.ammo);
 		user_ammo.x = game.global.myPlayer.image.x + pos_ammoX;
 		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
 
@@ -147,9 +149,10 @@ Spacewar.gameState.prototype = {
 		if (this.dKey.isDown)
 			msg.movement.rotRight = true;
 		if (this.spaceKey.isDown) {
-			msg.bullet = this.fireBullet()
+			if(game.global.myPlayer.ammo > 0){
+				msg.bullet = this.fireBullet()
+			}
 		}
-
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
 		}

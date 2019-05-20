@@ -92,6 +92,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
 							game.global.otherPlayers[player.id].player_name.x = player.posX
 							game.global.otherPlayers[player.id].player_name.y = player.posY-pos_nameY
+							game.global.otherPlayers[player.id].life.setText("Life: " + player.life)
 							game.global.otherPlayers[player.id].life.x = game.global.otherPlayers[player.id].image.x;
 							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-pos_lifeY;
 							game.global.otherPlayers[player.id].ammo.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;
