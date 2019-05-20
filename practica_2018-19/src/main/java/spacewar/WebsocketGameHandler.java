@@ -29,6 +29,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("id", player.getPlayerId());
 		msg.put("shipType", player.getShipType());
 		msg.put("player_name", player.getPlayerName());
+		msg.put("live", player.getPlayerLive());
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
 		
 		game.addPlayer(player);
@@ -47,6 +48,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("id", player.getPlayerId());
 				msg.put("shipType", player.getShipType());
 				msg.put("player_name", player.getPlayerName());
+				msg.put("live",player.getPlayerLive());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN ROOM":

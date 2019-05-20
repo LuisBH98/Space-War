@@ -111,6 +111,7 @@ public class SpacewarGame {
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("player_name", player.getPlayerName());
+				jsonPlayer.put("live", player.getPlayerLive());
 				jsonPlayer.put("shipType", player.getShipType());
 				jsonPlayer.put("posX", player.getPosX());
 				jsonPlayer.put("posY", player.getPosY());

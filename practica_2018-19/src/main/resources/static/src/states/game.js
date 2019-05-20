@@ -6,6 +6,7 @@ Spacewar.gameState = function(game) {
 }
 
 var user_name;
+var user_live;
 
 Spacewar.gameState.prototype = {
 
@@ -83,6 +84,9 @@ Spacewar.gameState.prototype = {
 				game.global.myPlayer.image.y - 20,
 				game.global.myPlayer.player_name, style)
 		user_name.anchor.setTo(0.5, 0.5);
+		
+		//Player live
+		user_live = new Phaser.Rectangle(game.global.myPlayer.image.x,game.global.myPlayer.image.y-25,game.global.myPlayer.live,20)
 
 		game.camera.follow(game.global.myPlayer.image);
 	},
@@ -90,7 +94,9 @@ Spacewar.gameState.prototype = {
 	update : function() {
 
 		user_name.x = game.global.myPlayer.image.x;
-		user_name.y = game.global.myPlayer.image.y - 20;
+		user_name.y = game.global.myPlayer.image.y - 30;
+		
+		game.debug.geom(user_live,'#1BFF00')
 
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
