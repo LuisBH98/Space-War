@@ -9,7 +9,8 @@ window.onload = function() {
 		socket : null,
 		myPlayer : new Object(),
 		otherPlayers : [],
-		projectiles : []
+		projectiles : [],
+		enough_players: false
 	}
 
 	var pos_nameY = 40
@@ -39,6 +40,7 @@ window.onload = function() {
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] JOIN message recieved')
 				console.dir(msg)
+				console.log(msg)
 			}
 			game.global.myPlayer.id = msg.id
 			game.global.myPlayer.shipType = msg.shipType
@@ -60,6 +62,11 @@ window.onload = function() {
 					name : msg.room
 			}
 			break
+		case 'NUM_PLAYERS':
+			if(msg.players > 1){
+				game.global.enough_players = true;
+			}
+			break;
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] GAME STATE UPDATE message recieved')

@@ -29,7 +29,13 @@ Spacewar.matchmakingState.prototype = {
 			if (game.global.DEBUG_MODE) {
 				console.log("[DEBUG] Joined room " + game.global.myPlayer.room);
 			}
-			game.state.start('roomState')
+			let message = {
+					event: 'PLAYERS'
+			}
+			game.global.socket.send(JSON.stringify(message));
+			if(game.global.enough_players){
+				game.state.start('roomState')
+			}
 		}
 	}
 }

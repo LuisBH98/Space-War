@@ -9,6 +9,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class WebsocketGameHandler extends TextWebSocketHandler {
@@ -61,6 +62,11 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			case "JOIN SPECIFIC ROOM":
 				msg.put("event", "NEW ROOM");
 				msg.put("room", "GLOBAL");
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
+			case "PLAYERS":
+				msg.put("event", "NUM_PLAYERS");
+				msg.put("players", game.getPlayers().size());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "UPDATE MOVEMENT":

@@ -51,7 +51,7 @@ Spacewar.menuState.prototype = {
 	
 	update : function() {
 		if(this.ready){
-			game.state.start('roomState')	
+			game.state.start('matchmakingState')	
 		}
 	}
 }
