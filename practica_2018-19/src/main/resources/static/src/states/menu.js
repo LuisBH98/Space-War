@@ -20,10 +20,8 @@ Spacewar.menuState.prototype = {
 		botonJoin = game.add.button(game.world.centerX - 95, 400, 'boton', createRoomFunc, this, 2, 1, 0);
 		botonJoin.scale.setTo(0.070, 0.070)
 		
-<<<<<<< HEAD
 		function createRoomFunc(){
 			this.ready=true;
-=======
 		text = game.add.text(game.world.centerX - 20, 420, "Play",{font:"30px Arial",fill:"#ffffff",align:"center"})
 		text.anchor.set(0.5)
 		
@@ -43,7 +41,6 @@ Spacewar.menuState.prototype = {
 				}
 				game.global.socket.send(JSON.stringify(message))
 				this.ready=true;
->>>>>>> 177d219db31ffb533bd49485f460cbd39623313e
 		}
 		
 		function createRoomFunc(){
