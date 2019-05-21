@@ -61,7 +61,7 @@ window.onload = function() {
 			game.global.myPlayer.room = msg.room;
 			break
 		case 'NUM_PLAYERS':
-			if(msg.players > 1){
+			if(msg.players >= 1){
 				game.global.enough_players = true;
 			}
 			break;
@@ -102,6 +102,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-pos_lifeY;
 							game.global.otherPlayers[player.id].ammo.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;
 							game.global.otherPlayers[player.id].ammo.y = game.global.otherPlayers[player.id].image.y-pos_ammoY;
+							game.global.otherPlayers[player.id].ammo.setText("Ammo: " + player.ammo)
 						}
 					}
 				}
