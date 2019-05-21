@@ -17,14 +17,19 @@ Spacewar.preloadState.prototype = {
 		game.load.atlas('explosion', 'assets/atlas/explosion.png',
 				'assets/atlas/explosion.json',
 				Phaser.Loader.TEXTURE_ATLAS_JSON_HASH)
-		game.load.image('boton','assets/images/boton.png')
+		game.load.image('boton','assets/images/button.png')
+<<<<<<< HEAD
+        game.load.image('back','assets/images/fondo.jpg')
+=======
+		game.load.image('back','assets/images/fondo.jpg')
+>>>>>>> 177d219db31ffb533bd49485f460cbd39623313e
 	},
 
 	create : function() {
-		game.state.start('menuState')
+		
 	},
 
 	update : function() {
-
+		game.state.start('menuState')
 	}
 }

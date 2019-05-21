@@ -2,6 +2,8 @@ package spacewar;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -59,14 +61,14 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("ammo", player.getPlayerAmmo());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
-			case "JOIN ANY ROOM":
+			case "ROOM1":
 				this.nombreSala = node.get("room").asText();
 				msg.put("event", "NEW ROOM");
 				msg.put("room", this.nombreSala);
 				salas.get(this.nombreSala).addPlayer(player);
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
-			case "JOIN SPECIFIC ROOM":
+			case "ROOM2":
 				this.nombreSala = node.get("room").asText();
 				msg.put("event", "NEW ROOM");
 				msg.put("room", this.nombreSala);
