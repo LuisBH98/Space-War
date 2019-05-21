@@ -14,11 +14,11 @@ Spacewar.matchmakingState.prototype = {
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Joining room...");
 		}
-		let message = {
+		/*let message = {
 			event : 'ROOM1',
 			room: game.global.myPlayer.room
 		}
-		game.global.socket.send(JSON.stringify(message))
+		game.global.socket.send(JSON.stringify(message))*/
 	},
 
 	create : function() {

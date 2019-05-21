@@ -28,18 +28,12 @@ Spacewar.lobbyState.prototype = {
 		botonJoin = game.add.button(game.world.centerX - 95, 400, 'boton', joinFunc, this, 2, 1, 0);
 		botonJoin.scale.setTo(0.070, 0.070)
 		
-		botonJoinNew = game.add.button(game.world.centerX - 45, 400, 'boton', joinFuncNew, this, 2, 1, 0);
-		
-		botonJoin = game.add.button(game.world.centerX - 95, 400, 'boton', joinFunc, this, 2, 1, 0);
-		botonJoin.scale.setTo(0.070, 0.070)
-		
 		botonJoinNew = game.add.button(game.world.centerX, 400, 'boton', joinFuncNew, this, 2, 1, 0);
 		botonJoinNew.scale.setTo(0.070, 0.070)
 		
 		function joinFunc(){
 			let message = {
 					event : 'ROOM1',
-					event : 'JOIN ANY ROOM',
 					room: 'Room1'
 				}
 				game.global.socket.send(JSON.stringify(message))
@@ -49,7 +43,6 @@ Spacewar.lobbyState.prototype = {
 		function joinFuncNew(){
 			let message = {
 					event : 'ROOM2',
-					event : 'JOIN SPECIFIC ROOM',
 					room:'Room2'
 				}
 				game.global.socket.send(JSON.stringify(message))
@@ -63,9 +56,5 @@ Spacewar.lobbyState.prototype = {
 		if(this.ready){
 			game.state.start('matchmakingState')
 		}
-		if(this.ready){
-			game.state.start('matchmakingState')
-		}
-		
 	}
 }
