@@ -58,9 +58,7 @@ window.onload = function() {
 				console.log('[DEBUG] NEW ROOM message recieved')
 				console.dir(msg)
 			}
-			game.global.myPlayer.room = {
-					name : msg.room
-			}
+			game.global.myPlayer.room = msg.room;
 			break
 		case 'NUM_PLAYERS':
 			if(msg.players > 1){

@@ -18,13 +18,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SpacewarGame {
 
-	public final static SpacewarGame INSTANCE = new SpacewarGame();
-
 	private final static int FPS = 30;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
-
+	public int maximoJugadores; 
+	public String nombreSala; 
+	public String modoJuego; 
+	
 	ObjectMapper mapper = new ObjectMapper();
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -33,16 +34,21 @@ public class SpacewarGame {
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private AtomicInteger numPlayers = new AtomicInteger();
 
-	private SpacewarGame() {
-
+	public SpacewarGame(String nombreSala, int maximoJugadores, String modoJuego) {
+		this.nombreSala=nombreSala;
+		this.maximoJugadores=maximoJugadores;
+		this.modoJuego=modoJuego;
+		
 	}
 
 	public void addPlayer(Player player) {
-		players.put(player.getSession().getId(), player);
+		if (players.values().size() < this.maximoJugadores) {
+			players.put(player.getSession().getId(), player);
 
-		int count = numPlayers.getAndIncrement();
-		if (count == 0) {
-			this.startGameLoop();
+			int count = numPlayers.getAndIncrement();
+			if (count == 0) {
+				this.startGameLoop();
+			}
 		}
 	}
 
@@ -128,7 +134,7 @@ public class SpacewarGame {
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
-						player.setPlayerLife(player.getPlayerLife()-10);
+						player.setPlayerLife(player.getPlayerLife() - 10);
 						projectile.setHit(true);
 						break;
 					}

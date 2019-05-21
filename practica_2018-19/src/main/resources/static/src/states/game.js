@@ -130,7 +130,7 @@ Spacewar.gameState.prototype = {
 
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
-
+		msg.room=game.global.myPlayer.room;
 		msg.movement = {
 			thrust : false,
 			brake : false,

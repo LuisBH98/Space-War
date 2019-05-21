@@ -1,5 +1,6 @@
 package spacewar;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.socket.CloseStatus;
@@ -14,17 +15,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class WebsocketGameHandler extends TextWebSocketHandler {
 
-	private SpacewarGame game = SpacewarGame.INSTANCE;
+	private ConcurrentHashMap<String, SpacewarGame> salas = new ConcurrentHashMap<>();
+	private SpacewarGame game = new SpacewarGame("Room1", 2, "1vs1");
+	private SpacewarGame game2 = new SpacewarGame("Room2", 2, "1vs1");
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
+	private String nombreSala;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
-		
+
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
 		msg.put("id", player.getPlayerId());
@@ -33,8 +37,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("life", player.getPlayerLife());
 		msg.put("ammo", player.getPlayerAmmo());
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
-		
-		game.addPlayer(player);
+
+		salas.putIfAbsent(game.nombreSala, game);
+		salas.putIfAbsent(game2.nombreSala, game2);
 	}
 
 	@Override
@@ -50,34 +55,40 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("id", player.getPlayerId());
 				msg.put("shipType", player.getShipType());
 				msg.put("player_name", player.getPlayerName());
-				msg.put("life",player.getPlayerLife());
+				msg.put("life", player.getPlayerLife());
 				msg.put("ammo", player.getPlayerAmmo());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN ANY ROOM":
+				this.nombreSala = node.get("room").asText();
 				msg.put("event", "NEW ROOM");
-				msg.put("room", "GLOBAL");
+				msg.put("room", this.nombreSala);
+				salas.get(this.nombreSala).addPlayer(player);
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN SPECIFIC ROOM":
+				this.nombreSala = node.get("room").asText();
 				msg.put("event", "NEW ROOM");
-				msg.put("room", "GLOBAL");
+				msg.put("room", this.nombreSala);
+				salas.get(this.nombreSala).addPlayer(player);
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "PLAYERS":
+				this.nombreSala = node.get("room").asText();
 				msg.put("event", "NUM_PLAYERS");
-				msg.put("players", game.getPlayers().size());
+				msg.put("players", salas.get(this.nombreSala).getPlayers().size());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "UPDATE MOVEMENT":
+				this.nombreSala = node.get("room").asText();
 				player.loadMovement(node.path("movement").get("thrust").asBoolean(),
 						node.path("movement").get("brake").asBoolean(),
 						node.path("movement").get("rotLeft").asBoolean(),
 						node.path("movement").get("rotRight").asBoolean());
 				if (node.path("bullet").asBoolean()) {
-					player.setPlayerAmmo(player.getPlayerAmmo()-1);
+					player.setPlayerAmmo(player.getPlayerAmmo() - 1);
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
-					game.addProjectile(projectile.getId(), projectile);
+					salas.get(this.nombreSala).addProjectile(projectile.getId(), projectile);
 				}
 				break;
 			default:
@@ -93,11 +104,14 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-		game.removePlayer(player);
+		
+		if (game.getPlayers().contains(player)) {
+			game.removePlayer(player);
+			ObjectNode msg = mapper.createObjectNode();
+			msg.put("event", "REMOVE PLAYER");
+			msg.put("id", player.getPlayerId());
+			game.broadcast(msg.toString());
 
-		ObjectNode msg = mapper.createObjectNode();
-		msg.put("event", "REMOVE PLAYER");
-		msg.put("id", player.getPlayerId());
-		game.broadcast(msg.toString());
+		}
 	}
 }

@@ -34,7 +34,8 @@ Spacewar.menuState.prototype = {
 		
 		function joinFunc(){
 			let message = {
-					event : 'JOIN ANY ROOM'
+					event : 'JOIN ANY ROOM',
+					room: 'Room1'
 				}
 				game.global.socket.send(JSON.stringify(message))
 				this.ready=true;
@@ -42,7 +43,8 @@ Spacewar.menuState.prototype = {
 		
 		function joinFuncNew(){
 			let message = {
-					event : 'JOIN SPECIFIC ROOM'
+					event : 'JOIN SPECIFIC ROOM',
+					room:'Room2'
 				}
 				game.global.socket.send(JSON.stringify(message))
 				this.ready=true;
