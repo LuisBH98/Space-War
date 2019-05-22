@@ -11,8 +11,10 @@ public class Player extends Spaceship {
 	private final int playerId;
 	private final String shipType;
 	private final String player_name;
+	private boolean ganador = false;
 	private int life;
 	private int ammo;
+	private int puntuacion = 0;
 
 	public Player(int playerId, WebSocketSession session) {
 		this.playerId = playerId;
@@ -41,6 +43,18 @@ public class Player extends Spaceship {
 	
 	public String getPlayerName() {
 		return this.player_name;
+	}
+	
+	public int getPuntuacion() {
+		return this.puntuacion;
+	}
+	
+	public void sumaPunto() {
+		this.puntuacion++;
+	}
+	
+	public void setGanador() {
+		this.ganador=true;
 	}
 
 	public int getPlayerId() {
