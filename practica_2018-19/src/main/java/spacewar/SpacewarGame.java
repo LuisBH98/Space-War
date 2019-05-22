@@ -40,13 +40,23 @@ public class SpacewarGame {
 		this.modoJuego=modoJuego;
 		
 	}
-
+	
+	//Comprobar si se puede entrar en la sala por su numero de jugadores
+    public boolean available() {
+        if(numPlayers.get()<maximoJugadores) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
 	public void addPlayer(Player player) {
 		if (players.values().size() < this.maximoJugadores) {
 			players.put(player.getSession().getId(), player);
 
-			int count = numPlayers.getAndIncrement();
-			if (count == this.maximoJugadores-1) {
+			int count = numPlayers.incrementAndGet();
+			if (count == this.maximoJugadores) {
 				this.startGameLoop();
 			}
 		}

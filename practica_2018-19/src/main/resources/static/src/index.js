@@ -53,12 +53,19 @@ window.onload = function() {
 				console.log('[DEBUG] Player life set to: ' + game.global.myPlayer.life);
 			}
 			break
-		case 'NEW ROOM' :
+		case 'JOIN ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')
 				console.dir(msg)
 			}
 			game.global.myPlayer.room = msg.room;
+			break
+		case 'ROOMS OCCUPIED' :
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] THE ROOM is already occupied')
+				console.dir(msg)
+			}
+			game.state.start('lobbyState')
 			break
 		case 'NUM_PLAYERS':
 			if(msg.players >= 1){
