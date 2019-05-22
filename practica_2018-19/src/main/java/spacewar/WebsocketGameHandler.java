@@ -100,12 +100,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					player.getSession().sendMessage(new TextMessage(msg.toString()));
 				}
 				break;
-			/*
-			 * case "ROOM2": nombreSala = node.get("room").asText(); msg.put("event",
-			 * "NEW ROOM"); msg.put("room", nombreSala);
-			 * salas.get(nombreSala).addPlayer(player); player.getSession().sendMessage(new
-			 * TextMessage(msg.toString())); break;
-			 */
 			case "PLAYERS":
 				nombreSala = node.get("room").asText();
 				msg.put("event", "NUM_PLAYERS");
@@ -141,10 +135,10 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		sessionPermit.release();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
-				salas.get(clave).removePlayer(player);
 				ObjectNode msg = mapper.createObjectNode();
 				msg.put("event", "REMOVE PLAYER");
 				msg.put("id", player.getPlayerId());
+				salas.get(clave).removePlayer(player);
 				salas.get(clave).broadcast(msg.toString());
 			}
 		}
