@@ -101,9 +101,9 @@ window.onload = function() {
 			if (typeof game.global.myPlayer.image !== 'undefined') {
 				for (var player of msg.players) {
 					if (game.global.myPlayer.id == player.id) {
-						game.global.myPlayer.image.x = player.posX
-						game.global.myPlayer.image.y = player.posY
-						game.global.myPlayer.image.angle = player.facingAngle
+						game.global.myPlayer.image.x = player.posX;
+						game.global.myPlayer.image.y = player.posY;
+						game.global.myPlayer.image.angle = player.facingAngle;
 						game.global.myPlayer.player_name = player.player_name;
 						game.global.myPlayer.life = player.life;
 						game.global.myPlayer.ammo = player.ammo;
@@ -120,12 +120,12 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].ammo = game.add.text(player.posX+pos_ammoX,player.posY-pos_ammoY,"Ammo:" + player.ammo,{font:"15px Arial",fill:"#ffffff"})
 							
 						} else {
-							game.global.otherPlayers[player.id].image.x = player.posX
-							game.global.otherPlayers[player.id].image.y = player.posY
-							game.global.otherPlayers[player.id].image.angle = player.facingAngle
-							game.global.otherPlayers[player.id].player_name.x = player.posX
-							game.global.otherPlayers[player.id].player_name.y = player.posY-pos_nameY
-							game.global.otherPlayers[player.id].life.setText("Life: " + player.life)
+							game.global.otherPlayers[player.id].image.x = player.posX;
+							game.global.otherPlayers[player.id].image.y = player.posY;
+							game.global.otherPlayers[player.id].image.angle = player.facingAngle;
+							game.global.otherPlayers[player.id].player_name.x = player.posX;
+							game.global.otherPlayers[player.id].player_name.y = player.posY-pos_nameY;
+							game.global.otherPlayers[player.id].life.setText("Life: " + player.life);
 							game.global.otherPlayers[player.id].life.x = game.global.otherPlayers[player.id].image.x;
 							game.global.otherPlayers[player.id].life.y = game.global.otherPlayers[player.id].image.y-pos_lifeY;
 							game.global.otherPlayers[player.id].ammo.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;

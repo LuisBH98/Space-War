@@ -23,14 +23,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
-	private Semaphore sessionPermit = new Semaphore(1);
+	private Lock sendMessagePermit = new ReentrantLock();
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		sessionPermit.acquire();
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
-		sessionPermit.release();
 
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
@@ -39,7 +37,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("player_name", player.getPlayerName());
 		msg.put("life", player.getPlayerLife());
 		msg.put("ammo", player.getPlayerAmmo());
+		sendMessagePermit.lock();
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
+		sendMessagePermit.unlock();
 
 	}
 
@@ -48,9 +48,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		try {
 			JsonNode node = mapper.readTree(message.getPayload());
 			ObjectNode msg = mapper.createObjectNode();
-			sessionPermit.acquire();
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-			sessionPermit.release();
 			String nombreSala;
 
 			switch (node.get("event").asText()) {
@@ -61,7 +59,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("player_name", player.getPlayerName());
 				msg.put("life", player.getPlayerLife());
 				msg.put("ammo", player.getPlayerAmmo());
+				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			case "CREATE NEW ROOM":
 				nombreSala = node.get("room").asText();
@@ -75,7 +75,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("event", "ANOTHER ROOM NAME");
 					msg.put("room", nombreSala);
 				}
+				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			case "JOIN ANY ROOM":
 				boolean addedPlayer = false;
@@ -91,7 +93,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				if (!addedPlayer) {
 					msg.put("event", "ROOMS OCCUPIED");
 				}
+				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			case "JOIN SPECIFIC ROOM":
 				nombreSala = node.get("room").asText();
@@ -108,7 +112,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("event", "NEED TO CREATE ROOMS");
 					msg.put("room", nombreSala);
 				}
+				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			case "PLAYERS":
 				nombreSala = node.get("room").asText();
@@ -118,7 +124,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				}else {
 					msg.put("event", "NEED TO CREATE ROOMS");
 				}
+				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			case "UPDATE MOVEMENT":
 				nombreSala = node.get("room").asText();
@@ -144,9 +152,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		sessionPermit.acquire();
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-		sessionPermit.release();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
 				ObjectNode msg = mapper.createObjectNode();

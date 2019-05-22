@@ -1,6 +1,8 @@
 package spacewar;
 
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,6 +17,7 @@ public class Player extends Spaceship {
 	private int life;
 	private int ammo;
 	private int puntuacion = 0;
+	public Lock sendMessagePlayer;
 
 	public Player(int playerId, WebSocketSession session) {
 		this.playerId = playerId;
@@ -23,6 +26,7 @@ public class Player extends Spaceship {
 		this.player_name = this.getRandomPlayerName();
 		this.life = 100;
 		this.ammo = 8;
+		this.sendMessagePlayer= new ReentrantLock();
 	}
 	
 	public int getPlayerLife() {

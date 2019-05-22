@@ -71,7 +71,7 @@ public class SpacewarGame {
 		players.remove(player.getSession().getId());
 
 		int count = this.numPlayers.decrementAndGet();
-		if (count == 1) {
+		if (count == 0) {
 			this.stopGameLoop();
 		}
 	}
@@ -102,7 +102,9 @@ public class SpacewarGame {
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
 			try {
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(message.toString()));
+				player.sendMessagePlayer.unlock();
 			} catch (Throwable ex) {
 				System.err.println("Execption sending message to player " + player.getSession().getId());
 				ex.printStackTrace(System.err);
@@ -126,7 +128,7 @@ public class SpacewarGame {
 			for(Player player : getPlayers()) {
 				if(player.getPuntuacion() == MAX_PUNTUACION) {
 					player.setGanador();
-					stopGameLoop();
+					this.stopGameLoop();
 				}
 			}
 			// Update players
