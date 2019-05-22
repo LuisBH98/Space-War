@@ -102,7 +102,11 @@ Spacewar.lobbyState.prototype = {
 		function joinFunc() {
 			var input = window.prompt("Enter room name")
 			
-			while (input==='' || input=== null){
+			if (input === null){
+				return
+			}
+			
+			while (input===''){
 				input = window.prompt("Enter room name")
 				
 			}
@@ -119,7 +123,10 @@ Spacewar.lobbyState.prototype = {
 		function joinFuncNew() {
 			var input = window.prompt("Enter room name")
 			
-			while (input==='' || input=== null){
+			if (input == null){
+				return
+			}
+			while (input===''){
 				input = window.prompt("Enter room name")
 				
 			}
