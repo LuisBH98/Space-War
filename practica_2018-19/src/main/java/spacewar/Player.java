@@ -11,6 +11,7 @@ public class Player extends Spaceship {
 	private final int playerId;
 	private final String shipType;
 	private final String player_name;
+	private boolean ganador = false;
 	private int life;
 	private int ammo;
 	private int puntuacion = 0;
@@ -50,6 +51,10 @@ public class Player extends Spaceship {
 	
 	public void sumaPunto() {
 		this.puntuacion++;
+	}
+	
+	public void setGanador() {
+		this.ganador=true;
 	}
 
 	public int getPlayerId() {

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class SpacewarGame {
 
 	private final static int FPS = 30;
+	private final static int MAX_PUNTUACION = 5;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
@@ -120,6 +121,14 @@ public class SpacewarGame {
 		boolean removeBullets = false;
 
 		try {
+			
+			//Comprobar si la puntuacion maxima ha sido alcanzada
+			for(Player player : getPlayers()) {
+				if(player.getPuntuacion() == MAX_PUNTUACION) {
+					player.setGanador();
+					stopGameLoop();
+				}
+			}
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
@@ -145,6 +154,7 @@ public class SpacewarGame {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
 						player.setPlayerLife(player.getPlayerLife() - 10);
+						projectile.getOwner().sumaPunto();
 						projectile.setHit(true);
 						break;
 					}
