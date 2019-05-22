@@ -70,7 +70,7 @@ public class SpacewarGame {
 		players.remove(player.getSession().getId());
 
 		int count = this.numPlayers.decrementAndGet();
-		if (count == 0) {
+		if (count == 1) {
 			this.stopGameLoop();
 		}
 	}

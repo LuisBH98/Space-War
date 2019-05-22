@@ -53,6 +53,22 @@ window.onload = function() {
 				console.log('[DEBUG] Player life set to: ' + game.global.myPlayer.life);
 			}
 			break
+		case 'NEED TO CREATE ROOMS' :
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] THE ROOM NAME is not valid')
+				console.dir(msg)
+			}
+			console.log("La room con nombre "+msg.room+" no existe, necesitas crearla!!");
+			game.state.start('lobbyState')
+			break
+		case 'ANOTHER ROOM NAME' :
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] THE ROOM NAME is not valid')
+				console.dir(msg)
+			}
+			console.log("The room name "+ msg.room +" is already used. Write another name.");
+			game.state.start('lobbyState')
+			break
 		case 'JOIN ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')
@@ -64,6 +80,11 @@ window.onload = function() {
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] THE ROOM is already occupied')
 				console.dir(msg)
+			}
+			if(!msg.room){
+				console.log("Todas las rooms que existen están ocupadas. Puedes crear tu propia room.");
+			}else{
+				console.log("La room "+msg.room+" está llena prueba en otro momento o crea tu propia room.");
 			}
 			game.state.start('lobbyState')
 			break
@@ -142,6 +163,9 @@ window.onload = function() {
 				console.dir(msg.players)
 			}
 			game.global.otherPlayers[msg.id].image.destroy()
+			game.global.otherPlayers[msg.id].player_name.destroy()
+			game.global.otherPlayers[msg.id].life.destroy()
+			game.global.otherPlayers[msg.id].ammo.destroy()
 			delete game.global.otherPlayers[msg.id]
 		default :
 			console.dir(msg)

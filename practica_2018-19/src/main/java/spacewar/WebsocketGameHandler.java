@@ -65,47 +65,51 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				break;
 			case "CREATE NEW ROOM":
 				nombreSala = node.get("room").asText();
-				msg.put("event", "JOIN ROOM");
-				msg.put("room", nombreSala);
-				SpacewarGame game = new SpacewarGame(nombreSala, 2, "1vs1");
-				salas.putIfAbsent(nombreSala, game);
-				salas.get(nombreSala).addPlayer(player);
+				if (!salas.containsKey(nombreSala)) {
+					msg.put("event", "JOIN ROOM");
+					msg.put("room", nombreSala);
+					SpacewarGame game = new SpacewarGame(nombreSala, 2, "1vs1");
+					salas.putIfAbsent(nombreSala, game);
+					salas.get(nombreSala).addPlayer(player);
+				} else {
+					msg.put("event", "ANOTHER ROOM NAME");
+					msg.put("room", nombreSala);
+				}
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN ANY ROOM":
-				boolean addedPlayer=false;
+				boolean addedPlayer = false;
 				for (String clave : salas.keySet()) {
 					if (salas.get(clave).available()) {
 						msg.put("event", "JOIN ROOM");
 						msg.put("room", clave);
 						salas.get(clave).addPlayer(player);
-						addedPlayer=true;
+						addedPlayer = true;
 						break;
 					}
 				}
-				if(!addedPlayer) {
+				if (!addedPlayer) {
 					msg.put("event", "ROOMS OCCUPIED");
 				}
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "JOIN SPECIFIC ROOM":
 				nombreSala = node.get("room").asText();
-				if (salas.get(nombreSala).available()) {
-					msg.put("event", "JOIN ROOM");
+				if (salas.containsKey(nombreSala)) {
+					if (salas.get(nombreSala).available()) {
+						msg.put("event", "JOIN ROOM");
+						msg.put("room", nombreSala);
+						salas.get(nombreSala).addPlayer(player);
+					} else {
+						msg.put("event", "ROOMS OCCUPIED");
+						msg.put("room", nombreSala);
+					}
+				}else {
+					msg.put("event", "NEED TO CREATE ROOMS");
 					msg.put("room", nombreSala);
-					salas.get(nombreSala).addPlayer(player);
-					player.getSession().sendMessage(new TextMessage(msg.toString()));
-				} else {
-					msg.put("event", "ROOMS OCCUPIED");
-					player.getSession().sendMessage(new TextMessage(msg.toString()));
 				}
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
-			/*
-			 * case "ROOM2": nombreSala = node.get("room").asText(); msg.put("event",
-			 * "NEW ROOM"); msg.put("room", nombreSala);
-			 * salas.get(nombreSala).addPlayer(player); player.getSession().sendMessage(new
-			 * TextMessage(msg.toString())); break;
-			 */
 			case "PLAYERS":
 				nombreSala = node.get("room").asText();
 				msg.put("event", "NUM_PLAYERS");
@@ -141,11 +145,14 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		sessionPermit.release();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
-				salas.get(clave).removePlayer(player);
 				ObjectNode msg = mapper.createObjectNode();
+				salas.get(clave).removePlayer(player);
 				msg.put("event", "REMOVE PLAYER");
 				msg.put("id", player.getPlayerId());
 				salas.get(clave).broadcast(msg.toString());
+				if (salas.get(clave).getPlayers().size() <= 0) {
+					salas.remove(clave);
+				}
 			}
 		}
 	}
