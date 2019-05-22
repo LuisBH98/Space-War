@@ -142,6 +142,9 @@ window.onload = function() {
 				console.dir(msg.players)
 			}
 			game.global.otherPlayers[msg.id].image.destroy()
+			game.global.otherPlayers[msg.id].player_name.destroy()
+			game.global.otherPlayers[msg.id].life.destroy()
+			game.global.otherPlayers[msg.id].ammo.destroy()
 			delete game.global.otherPlayers[msg.id]
 		default :
 			console.dir(msg)
