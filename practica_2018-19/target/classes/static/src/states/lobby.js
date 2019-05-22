@@ -18,6 +18,8 @@ var centerBotonsX = 50;
 var centerTextY = 315;
 var centerTextX = 50;
 
+var input;
+
 Spacewar.lobbyState.prototype = {
 
 	init : function() {
@@ -41,7 +43,9 @@ Spacewar.lobbyState.prototype = {
 	},
 
 	create : function() {
-
+		
+		
+		
 		game.add.sprite(0, 0, 'back')
 
 		var title = game.add.sprite(game.world.centerX, 50, 'title')
@@ -96,9 +100,17 @@ Spacewar.lobbyState.prototype = {
 		joinRoomAny.anchor.setTo(0.5, 0.5)
 
 		function joinFunc() {
+			var input = window.prompt("Enter room name")
+			
+			while (input==='' || input=== null){
+				input = window.prompt("Enter room name")
+				
+			}
+			console.log("Room name:" + input)
+			
 			let message = {
 				event : 'CREATE NEW ROOM',
-				room : 'Room1'
+				room : input
 			}
 			game.global.socket.send(JSON.stringify(message))
 			this.ready = true;
