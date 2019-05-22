@@ -117,10 +117,19 @@ Spacewar.lobbyState.prototype = {
 		}
 
 		function joinFuncNew() {
+			var input = window.prompt("Enter room name")
+			
+			while (input==='' || input=== null){
+				input = window.prompt("Enter room name")
+				
+			}
+			console.log("Room name:" + input)
+			
 			let message = {
 				event : 'JOIN SPECIFIC ROOM',
-				room : 'Room1'
+				room : input
 			}
+			
 			game.global.socket.send(JSON.stringify(message))
 			this.ready = true;
 		}
