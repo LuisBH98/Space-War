@@ -46,7 +46,7 @@ public class SpacewarGame {
 			players.put(player.getSession().getId(), player);
 
 			int count = numPlayers.getAndIncrement();
-			if (count == 0) {
+			if (count == this.maximoJugadores-1) {
 				this.startGameLoop();
 			}
 		}
