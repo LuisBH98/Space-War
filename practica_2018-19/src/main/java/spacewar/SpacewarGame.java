@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -39,6 +40,7 @@ public class SpacewarGame {
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private AtomicInteger numPlayers = new AtomicInteger();
 	public Lock endGamePermit = new ReentrantLock();
+	public Semaphore sendMessagePlayer = new Semaphore(1);
 	boolean endGame = false;
 
 	public SpacewarGame(String nombreSala, int maximoJugadores, String modoJuego) {
@@ -107,9 +109,9 @@ public class SpacewarGame {
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
 			try {
-				player.sendMessagePlayer.lock();
+				sendMessagePlayer.acquire();
 				player.getSession().sendMessage(new TextMessage(message.toString()));
-				player.sendMessagePlayer.unlock();
+				sendMessagePlayer.release();
 			} catch (Throwable ex) {
 				System.err.println("Execption sending message to player " + player.getSession().getId());
 				ex.printStackTrace(System.err);
