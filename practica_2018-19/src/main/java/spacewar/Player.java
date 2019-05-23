@@ -59,8 +59,8 @@ public class Player extends Spaceship {
 		this.puntuacion++;
 	}
 	
-	public void setPerdedor() {
-		this.perdedor=true;
+	public void setPerdedor(boolean perdedor) {
+		this.perdedor=perdedor;
 	}
 	
 	public boolean getPerdedor() {

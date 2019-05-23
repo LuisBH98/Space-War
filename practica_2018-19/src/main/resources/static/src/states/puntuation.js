@@ -39,18 +39,19 @@ Spacewar.puntuationState.prototype = {
 		}
 		
 		
-		
+		let message = {
+				event: 'REMOVE ROOM',
+				room:game.global.myPlayer.room
+		}
+		game.global.socket.send(JSON.stringify(message));
         console.log(game.global.myPlayer.player_name)
         console.log(game.global.myPlayer.perdedor)
         console.log(game.global.myPlayer.life)
         console.log(game.global.myPlayer.puntuacion)
         
         function backToMenu(){
-        	let message = {
-    				event: 'REMOVE ROOM',
-    				room:game.global.myPlayer.room
-    		}
-    		game.global.socket.send(JSON.stringify(message));
+        	game.global.myPlayer = new Object();
+    		game.global.otherPlayers = [];
         	game.state.start('lobbyState')
         }
 	},
