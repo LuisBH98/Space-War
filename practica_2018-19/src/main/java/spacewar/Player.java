@@ -13,7 +13,7 @@ public class Player extends Spaceship {
 	private final int playerId;
 	private final String shipType;
 	private final String player_name;
-	private boolean ganador = false;
+	private boolean perdedor = false;
 	private int life;
 	private int ammo;
 	private int puntuacion = 0;
@@ -25,7 +25,7 @@ public class Player extends Spaceship {
 		this.shipType = this.getRandomShipType();
 		this.player_name = this.getRandomPlayerName();
 		this.life = 100;
-		this.ammo = 8;
+		this.ammo = 30;
 		this.sendMessagePlayer= new ReentrantLock();
 	}
 	
@@ -57,8 +57,12 @@ public class Player extends Spaceship {
 		this.puntuacion++;
 	}
 	
-	public void setGanador() {
-		this.ganador=true;
+	public void setPerdedor() {
+		this.perdedor=true;
+	}
+	
+	public boolean getPerdedor() {
+		return this.perdedor;
 	}
 
 	public int getPlayerId() {

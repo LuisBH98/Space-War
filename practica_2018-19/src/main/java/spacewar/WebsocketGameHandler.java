@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class WebsocketGameHandler extends TextWebSocketHandler {
 
-	private ConcurrentHashMap<String, SpacewarGame> salas = new ConcurrentHashMap<>();
+	public ConcurrentHashMap<String, SpacewarGame> salas = new ConcurrentHashMap<>();
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
@@ -28,7 +28,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		Player player = new Player(playerId.incrementAndGet(), session);
+		sendMessagePermit.lock();
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
+		sendMessagePermit.unlock();
 
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
@@ -48,7 +50,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		try {
 			JsonNode node = mapper.readTree(message.getPayload());
 			ObjectNode msg = mapper.createObjectNode();
+			sendMessagePermit.lock();
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
+			sendMessagePermit.unlock();
 			String nombreSala;
 
 			switch (node.get("event").asText()) {
@@ -140,6 +144,10 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					salas.get(nombreSala).addProjectile(projectile.getId(), projectile);
 				}
 				break;
+			case "REMOVE ROOM":
+				nombreSala = node.get("room").asText();
+				salas.remove(nombreSala);
+				break;
 			default:
 				break;
 			}
@@ -152,7 +160,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		sendMessagePermit.lock();
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
+		sendMessagePermit.unlock();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
 				ObjectNode msg = mapper.createObjectNode();

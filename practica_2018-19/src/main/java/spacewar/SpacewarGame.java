@@ -9,6 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.web.socket.TextMessage;
 
@@ -19,14 +21,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class SpacewarGame {
 
 	private final static int FPS = 30;
-	private final static int MAX_PUNTUACION = 5;
+	private final static int MAX_PUNTUACION = 2;
+	private final static int MAX_LIFE = 100;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
-	public int maximoJugadores; 
-	public String nombreSala; 
-	public String modoJuego; 
-	
+	public int maximoJugadores;
+	public String nombreSala;
+	public String modoJuego;
+
 	ObjectMapper mapper = new ObjectMapper();
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -34,24 +37,25 @@ public class SpacewarGame {
 	private Map<String, Player> players = new ConcurrentHashMap<>();
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private AtomicInteger numPlayers = new AtomicInteger();
+	public Lock endGamePermit = new ReentrantLock();
+	boolean endGame = false;
 
 	public SpacewarGame(String nombreSala, int maximoJugadores, String modoJuego) {
-		this.nombreSala=nombreSala;
-		this.maximoJugadores=maximoJugadores;
-		this.modoJuego=modoJuego;
-		
+		this.nombreSala = nombreSala;
+		this.maximoJugadores = maximoJugadores;
+		this.modoJuego = modoJuego;
+
 	}
-	
-	//Comprobar si se puede entrar en la sala por su numero de jugadores
-    public boolean available() {
-        if(numPlayers.get()<maximoJugadores) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
+
+	// Comprobar si se puede entrar en la sala por su numero de jugadores
+	public boolean available() {
+		if (this.numPlayers.get() < maximoJugadores) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void addPlayer(Player player) {
 		if (players.values().size() < this.maximoJugadores) {
 			players.put(player.getSession().getId(), player);
@@ -116,6 +120,7 @@ public class SpacewarGame {
 	private void tick() {
 		ObjectNode json = mapper.createObjectNode();
 		ArrayNode arrayNodePlayers = mapper.createArrayNode();
+		ArrayNode arrayNodePlayersEndGame = mapper.createArrayNode();
 		ArrayNode arrayNodeProjectiles = mapper.createArrayNode();
 
 		long thisInstant = System.currentTimeMillis();
@@ -123,14 +128,7 @@ public class SpacewarGame {
 		boolean removeBullets = false;
 
 		try {
-			
-			//Comprobar si la puntuacion maxima ha sido alcanzada
-			for(Player player : getPlayers()) {
-				if(player.getPuntuacion() == MAX_PUNTUACION) {
-					player.setGanador();
-					this.stopGameLoop();
-				}
-			}
+
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
@@ -156,7 +154,6 @@ public class SpacewarGame {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
 						player.setPlayerLife(player.getPlayerLife() - 10);
-						projectile.getOwner().sumaPunto();
 						projectile.setHit(true);
 						break;
 					}
@@ -185,12 +182,48 @@ public class SpacewarGame {
 
 			if (removeBullets)
 				this.projectiles.keySet().removeAll(bullets2Remove);
+			// Comprobar si la puntuacion maxima ha sido alcanzada
+			for (Player player : getPlayers()) {
+				if (player.getPlayerLife() <= 0) {
+					player.setPlayerLife(MAX_LIFE);
+					player.setPerdedor();
+					for (Player otherPlayer : getPlayers()) {
+						if (otherPlayer.getPlayerLife() > 0) {
+							otherPlayer.sumaPunto();
+							if (otherPlayer.getPuntuacion() >= MAX_PUNTUACION) {
+								this.endGamePermit.lock();
+								this.endGame = true;
+								this.endGamePermit.unlock();
+								this.stopGameLoop();
+							}
+						}
+					}
+				}
+				ObjectNode jsonPlayer = mapper.createObjectNode();
+				jsonPlayer.put("id", player.getPlayerId());
+				jsonPlayer.put("player_name", player.getPlayerName());
+				jsonPlayer.put("life", player.getPlayerLife());
+				jsonPlayer.put("perdedor", player.getPerdedor());
+				jsonPlayer.put("puntuacion", player.getPuntuacion());
+				arrayNodePlayersEndGame.addPOJO(jsonPlayer);
+			}
+			this.endGamePermit.lock();
+			if (this.endGame == false) {
+				this.endGamePermit.unlock();
+				json.put("event", "GAME STATE UPDATE");
+				json.putPOJO("players", arrayNodePlayers);
+				json.putPOJO("projectiles", arrayNodeProjectiles);
+				this.broadcast(json.toString());
+			} else {
+				this.endGamePermit.unlock();
+				json.put("event", "END GAME");
+				json.putPOJO("players", arrayNodePlayersEndGame);
+				this.broadcast(json.toString());
+				for (Player player : getPlayers()) {
+					this.removePlayer(player);
+				}
+			}
 
-			json.put("event", "GAME STATE UPDATE");
-			json.putPOJO("players", arrayNodePlayers);
-			json.putPOJO("projectiles", arrayNodeProjectiles);
-
-			this.broadcast(json.toString());
 		} catch (Throwable ex) {
 
 		}
