@@ -13,10 +13,10 @@ public class Player extends Spaceship {
 	private final int playerId;
 	private final String shipType;
 	private final String player_name;
-	private boolean perdedor = false;
+	private boolean perdedor;
 	private int life;
 	private int ammo;
-	private int puntuacion = 0;
+	private int puntuacion;
 	public Lock sendMessagePlayer;
 
 	public Player(int playerId, WebSocketSession session) {
@@ -27,6 +27,8 @@ public class Player extends Spaceship {
 		this.life = 100;
 		this.ammo = 30;
 		this.sendMessagePlayer= new ReentrantLock();
+		this.perdedor=false;
+		this.puntuacion=0;
 	}
 	
 	public int getPlayerLife() {
