@@ -132,7 +132,11 @@ public class SpacewarGame {
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
-
+				if (player.getPlayerLife() <= 0) {
+					//player.setPlayerLife(MAX_LIFE);
+					player.setPerdedor();
+					this.stopGameLoop();
+				}
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("player_name", player.getPlayerName());
@@ -142,6 +146,8 @@ public class SpacewarGame {
 				jsonPlayer.put("posX", player.getPosX());
 				jsonPlayer.put("posY", player.getPosY());
 				jsonPlayer.put("facingAngle", player.getFacingAngle());
+				jsonPlayer.put("perdedor", player.getPerdedor());
+				jsonPlayer.put("puntuacion", player.getPuntuacion());
 				arrayNodePlayers.addPOJO(jsonPlayer);
 			}
 
@@ -182,8 +188,13 @@ public class SpacewarGame {
 
 			if (removeBullets)
 				this.projectiles.keySet().removeAll(bullets2Remove);
+
+			json.put("event", "GAME STATE UPDATE");
+			json.putPOJO("players", arrayNodePlayers);
+			json.putPOJO("projectiles", arrayNodeProjectiles);
+			this.broadcast(json.toString());
 			// Comprobar si la puntuacion maxima ha sido alcanzada
-			for (Player player : getPlayers()) {
+			/*for (Player player : getPlayers()) {
 				if (player.getPlayerLife() <= 0) {
 					player.setPlayerLife(MAX_LIFE);
 					player.setPerdedor();
@@ -209,12 +220,8 @@ public class SpacewarGame {
 			}
 			this.endGamePermit.lock();
 			if (this.endGame == false) {
-				this.endGamePermit.unlock();
-				json.put("event", "GAME STATE UPDATE");
-				json.putPOJO("players", arrayNodePlayers);
-				json.putPOJO("projectiles", arrayNodeProjectiles);
-				this.broadcast(json.toString());
-			} else {
+				this.endGamePermit.unlock();*/
+			/*} else {
 				this.endGamePermit.unlock();
 				json.put("event", "END GAME");
 				json.putPOJO("players", arrayNodePlayersEndGame);
@@ -222,7 +229,7 @@ public class SpacewarGame {
 				for (Player player : getPlayers()) {
 					this.removePlayer(player);
 				}
-			}
+			}*/
 
 		} catch (Throwable ex) {
 

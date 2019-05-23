@@ -101,12 +101,19 @@ window.onload = function() {
 			if (typeof game.global.myPlayer.image !== 'undefined') {
 				for (var player of msg.players) {
 					if (game.global.myPlayer.id == player.id) {
+						game.global.myPlayer.id = player.id;
 						game.global.myPlayer.image.x = player.posX;
 						game.global.myPlayer.image.y = player.posY;
 						game.global.myPlayer.image.angle = player.facingAngle;
 						game.global.myPlayer.player_name = player.player_name;
 						game.global.myPlayer.life = player.life;
 						game.global.myPlayer.ammo = player.ammo;
+						game.global.myPlayer.perdedor = player.perdedor;
+						game.global.myPlayer.puntuacion = player.puntuacion;
+						if(game.global.myPlayer.perdedor){
+							console.log("Perdiste")
+							game.state.start("puntuationState")
+						}
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
 							game.global.otherPlayers[player.id] = {
@@ -118,7 +125,13 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].life.anchor.setTo(0.5,0.5)
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
 							game.global.otherPlayers[player.id].ammo = game.add.text(player.posX+pos_ammoX,player.posY-pos_ammoY,"Ammo:" + player.ammo,{font:"15px Arial",fill:"#ffffff"})
-							
+							game.global.otherPlayers[player.id].perdedor = player.perdedor;
+							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
+							game.global.otherPlayers[player.id].id = player.id;
+							if(game.global.otherPlayers[player.id].perdedor){
+								console.log("Ganaste")
+								game.state.start("puntuationState")
+							}
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX;
 							game.global.otherPlayers[player.id].image.y = player.posY;
@@ -131,6 +144,13 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].ammo.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;
 							game.global.otherPlayers[player.id].ammo.y = game.global.otherPlayers[player.id].image.y-pos_ammoY;
 							game.global.otherPlayers[player.id].ammo.setText("Ammo: " + player.ammo);
+							game.global.otherPlayers[player.id].perdedor = player.perdedor;
+							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
+							game.global.otherPlayers[player.id].id = player.id;
+							if(game.global.otherPlayers[player.id].perdedor){
+								console.log("Ganaste")
+								game.state.start("puntuationState")
+							}
 						}
 					}
 				}
@@ -157,7 +177,7 @@ window.onload = function() {
 				}
 			}
 			break
-		case 'END GAME' :
+		/*case 'END GAME' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] END GAME message recieved')
 				console.dir(msg)
@@ -188,7 +208,7 @@ window.onload = function() {
 					}
 				}
 			}
-			break;
+			break;*/
 		case 'REMOVE PLAYER' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] REMOVE PLAYER message recieved')
