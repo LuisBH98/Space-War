@@ -43,8 +43,8 @@ public class Player extends Spaceship {
 		return this.ammo;
 	}
 	
-	public void setPlayerAmmo(int ammo_) {
-		this.ammo = ammo_;
+	public void setPlayerAmmo(int ammo) {
+		this.ammo = ammo;
 	}
 	
 	public String getPlayerName() {

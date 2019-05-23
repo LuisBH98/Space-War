@@ -135,9 +135,11 @@ public class SpacewarGame {
 				player.calculateMovement();
 				player.setPerdedor(false);
 				if (player.getPlayerLife() <= 0) {
-					player.setPlayerLife(MAX_LIFE);
-					player.setPlayerAmmo(MAX_AMMO);
 					player.setPerdedor(true);
+					for (Player playerReset : getPlayers()) {
+						playerReset.setPlayerLife(MAX_LIFE);
+						playerReset.setPlayerAmmo(MAX_AMMO);
+					}
 					this.stopGameLoop();
 				}
 				ObjectNode jsonPlayer = mapper.createObjectNode();

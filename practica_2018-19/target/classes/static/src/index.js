@@ -71,7 +71,7 @@ window.onload = function() {
 			break
 		case 'JOIN ROOM' :
 			if (game.global.DEBUG_MODE) {
-				console.log('[DEBUG] NEW ROOM message recieved')
+				console.log('[DEBUG] JOIN ROOM message recieved')
 				console.dir(msg)
 			}
 			game.global.myPlayer.room = msg.room;
