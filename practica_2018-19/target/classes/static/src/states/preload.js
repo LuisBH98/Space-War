@@ -21,6 +21,8 @@ Spacewar.preloadState.prototype = {
 		game.load.image('back','assets/images/fondo2.jpg')
 		game.load.image('title','assets/images/title.png')
 		game.load.image('star','assets/images/star2.png')
+		game.load.image('puntuation','assets/images/hallOfFame.png')
+		game.load.image('back_button','assets/images/back_button.png')
 	},
 
 	create : function() {
