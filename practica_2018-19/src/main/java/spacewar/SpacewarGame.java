@@ -40,7 +40,6 @@ public class SpacewarGame {
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private AtomicInteger numPlayers = new AtomicInteger();
 	public Lock endGamePermit = new ReentrantLock();
-	public Semaphore sendMessagePlayer = new Semaphore(1);
 	boolean endGame = false;
 
 	public SpacewarGame(String nombreSala, int maximoJugadores, String modoJuego) {
@@ -109,9 +108,9 @@ public class SpacewarGame {
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
 			try {
-				sendMessagePlayer.acquire();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(message.toString()));
-				sendMessagePlayer.release();
+				player.sendMessagePlayer.unlock();
 			} catch (Throwable ex) {
 				System.err.println("Execption sending message to player " + player.getSession().getId());
 				ex.printStackTrace(System.err);

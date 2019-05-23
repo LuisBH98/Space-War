@@ -1,6 +1,7 @@
 package spacewar;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -17,6 +18,7 @@ public class Player extends Spaceship {
 	private int life;
 	private int ammo;
 	private int puntuacion;
+	public Lock sendMessagePlayer = new ReentrantLock();
 
 	public Player(int playerId, WebSocketSession session) {
 		this.playerId = playerId;
