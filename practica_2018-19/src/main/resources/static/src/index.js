@@ -4,6 +4,7 @@ window.onload = function() {
 
 	// GLOBAL VARIABLES
 	game.global = {
+		mensajeChat : "Sin hablar",
 		FPS : 30,
 		DEBUG_MODE : false,
 		socket : null,
@@ -200,6 +201,7 @@ window.onload = function() {
 				console.log('[DEBUG] CHAT PLAYERS message recieved')
 				console.dir(msg)
 			}
+			game.global.mensajeChat=(msg.player+": "+msg.mensaje);
 			console.log("Mensaje enviado por "+msg.player+": "+msg.mensaje)
 			break
 		case 'NEW NAME CLIENT':

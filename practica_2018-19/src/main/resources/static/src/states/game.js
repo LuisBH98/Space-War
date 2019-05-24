@@ -111,6 +111,25 @@ Spacewar.gameState.prototype = {
 		game.camera.follow(game.global.myPlayer.image);
 
 		//Chat
+		
+		var style = { font: "35px Arial", fill: "#ffff00", align: "center" };
+
+	    this.t = game.add.text(game.world.centerX+225, 470, game.global.mensajeChat, style);
+	    
+	    var chatTitulo = game.add.text(game.world.centerX+225, 430, "Chat:", style);
+	    
+	    var jugadoresTitulo = game.add.text(game.world.centerX+225, 50, "Jugadores:", style);
+	    
+	    var nombresEnPantalla=new Array();
+	    
+	    var i = 100;
+	    var j = 0;
+		for(var jugador in game.global.allPlayers){
+			nombresEnPantalla[j]=game.add.text(game.world.centerX+225, i, jugador.player_name, {font: "35px Arial", fill: "#ffff00", align: "center"})
+			i+=50;
+			j+=1;
+		}
+		
 		botonChat= game.add.button(game.world.centerX-centerBotonsX+300,
 			centerBotonsY + 200, 'joinRoom', joinFuncChat, this, 2, 1, 0);
 		botonChat.scale.setTo(0.25, 0.25)
@@ -151,6 +170,16 @@ Spacewar.gameState.prototype = {
 		user_ammo.setText("Ammo: "+ game.global.myPlayer.ammo);
 		user_ammo.x = game.global.myPlayer.image.x + pos_ammoX;
 		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
+		
+		//Update mensaje de chat
+		this.t.setText(game.global.mensajeChat);
+		
+		/*Update lista de jugadores
+		var j=0;
+		for(var jugador in game.global.allPlayers){
+			this.nombresEnPantalla[j].setText(jugador.player_name);
+			j+=1;
+		}*/
 
 
 		let msg = new Object()
