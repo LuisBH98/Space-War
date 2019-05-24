@@ -124,6 +124,7 @@ Spacewar.lobbyState.prototype = {
 			game.global.socket.send(JSON.stringify(message))
 			this.ready = true;
 		}
+
 	},
 
 	update : function() {

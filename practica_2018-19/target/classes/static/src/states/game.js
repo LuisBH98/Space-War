@@ -109,6 +109,31 @@ Spacewar.gameState.prototype = {
 				})
 
 		game.camera.follow(game.global.myPlayer.image);
+
+		//Chat
+		botonChat= game.add.button(game.world.centerX-centerBotonsX+300,
+			centerBotonsY + 200, 'joinRoom', joinFuncChat, this, 2, 1, 0);
+		botonChat.scale.setTo(0.25, 0.25)
+
+		function joinFuncChat() {
+			var input = window.prompt("Enter a chat message")
+			
+			if (input === null){
+				return
+			}
+			
+			while (input===''){
+				input = window.prompt("Enter a chat message")
+				
+			}
+			let message = {
+				event : 'CHAT ROOM',
+				player: game.global.myPlayer.player_name,
+				mensaje: input,
+				room: game.global.myPlayer.room
+			}
+			game.global.socket.send(JSON.stringify(message))
+		}
 	},
 
 	update : function() {

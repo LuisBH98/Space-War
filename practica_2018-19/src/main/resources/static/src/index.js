@@ -100,7 +100,11 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			if (typeof game.global.myPlayer.image !== 'undefined') {
-				
+				game.global.allPlayers=msg.players;
+				if (msg.players.length==1){
+					console.log("Ganaste")
+					game.state.start('puntuationState')
+				}
 				for (var player of msg.players) {
 					if (game.global.myPlayer.id == player.id) {
 						game.global.myPlayer.id = player.id;
@@ -111,10 +115,10 @@ window.onload = function() {
 						game.global.myPlayer.life = player.life;
 						game.global.myPlayer.ammo = player.ammo;
 						game.global.myPlayer.perdedor = player.perdedor;
+						game.global.myPlayer.ganador = player.ganador;
 						game.global.myPlayer.puntuacion = player.puntuacion;
 						if(game.global.myPlayer.perdedor){
 							console.log("Perdiste")
-							game.global.allPlayers=msg.players;
 							game.state.start('puntuationState')
 						}
 					} else {
@@ -133,7 +137,6 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
-								game.global.allPlayers=msg.players;
 								game.state.start('puntuationState')
 							}
 						} else {
@@ -153,7 +156,6 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
-								game.global.allPlayers=msg.players;
 								game.state.start('puntuationState')
 							}
 						}
@@ -192,9 +194,24 @@ window.onload = function() {
 			game.global.otherPlayers[msg.id].life.destroy()
 			game.global.otherPlayers[msg.id].ammo.destroy()
 			delete game.global.otherPlayers[msg.id]
+			break
+		case 'CHAT':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] CHAT PLAYERS message recieved')
+				console.dir(msg)
+			}
+			console.log("Mensaje enviado por "+msg.player+": "+msg.mensaje)
+			break
+		case 'NEW NAME CLIENT':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] NEW NAME message recieved')
+				console.dir(msg)
+			}
+			game.global.myPlayer.player_name=msg.player_name;
 		default :
 			console.dir(msg)
 			break
+		
 		}
 	}
 

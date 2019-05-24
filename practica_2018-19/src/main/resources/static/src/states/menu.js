@@ -48,9 +48,30 @@ Spacewar.menuState.prototype = {
 		playButton = game.add.button(game.world.centerX-75, game.world.centerY, 'play', enterLobbyFunc, this, 2, 1, 0);
 		playButton.scale.setTo(0.25, 0.25)
 		
+		introducirNombre= game.add.button(game.world.centerX-centerBotonsX,
+			centerBotonsY -200, 'joinRoom', joinFuncIntroducirNombre, this, 2, 1, 0);
+		introducirNombre.scale.setTo(0.25, 0.25)
 		
 		function enterLobbyFunc(){
 			this.ready = true;
+		}
+
+		function joinFuncIntroducirNombre() {
+			var input = window.prompt("Enter a chat message")
+			
+			if (input === null){
+				return
+			}
+			
+			while (input===''){
+				input = window.prompt("Enter a chat message")
+				
+			}
+			let message = {
+				event : 'NEW NAME',
+				player_name: input,
+			}
+			game.global.socket.send(JSON.stringify(message))
 		}
 	},
 	

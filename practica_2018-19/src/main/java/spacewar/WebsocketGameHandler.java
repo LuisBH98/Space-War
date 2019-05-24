@@ -50,7 +50,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			JsonNode node = mapper.readTree(message.getPayload());
 			ObjectNode msg = mapper.createObjectNode();
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-			String nombreSala;
+			String nombreSala, mensaje, nombrePlayer;
 
 			switch (node.get("event").asText()) {
 			case "JOIN":
@@ -144,6 +144,25 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			case "REMOVE ROOM":
 				nombreSala = node.get("room").asText();
 				salas.remove(nombreSala);
+				break;
+			case "CHAT ROOM":
+				nombreSala = node.get("room").asText();
+				nombrePlayer = node.get("player").asText();
+				mensaje = node.get("mensaje").asText();
+				msg.put("event", "CHAT");
+				msg.put("player",nombrePlayer);
+				msg.put("mensaje",mensaje);
+
+				salas.get(nombreSala).broadcast(msg.toString());
+				break;
+			case "NEW NAME":
+				nombrePlayer = node.get("player_name").asText();
+				msg.put("event", "NEW NAME CLIENT");
+				msg.put("player_name", nombrePlayer);
+				player.setPlayerName(nombrePlayer);
+				sendMessagePermit.lock();
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
 				break;
 			default:
 				break;

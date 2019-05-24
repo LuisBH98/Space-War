@@ -13,8 +13,9 @@ public class Player extends Spaceship {
 	private final WebSocketSession session;
 	private final int playerId;
 	private final String shipType;
-	private final String player_name;
+	private String player_name;
 	private boolean perdedor;
+	private boolean ganador;
 	private int life;
 	private int ammo;
 	private int puntuacion;
@@ -67,6 +68,14 @@ public class Player extends Spaceship {
 		return this.perdedor;
 	}
 
+	public void setGanador(boolean perdedor) {
+		this.ganador = ganador;
+	}
+	
+	public boolean getGanador() {
+		return this.ganador;
+	}
+	
 	public int getPlayerId() {
 		return this.playerId;
 	}
@@ -81,6 +90,10 @@ public class Player extends Spaceship {
 
 	public String getShipType() {
 		return shipType;
+	}
+	
+	public void setPlayerName(String player_name) {
+		this.player_name=player_name;
 	}
 
 	private String getRandomShipType() {

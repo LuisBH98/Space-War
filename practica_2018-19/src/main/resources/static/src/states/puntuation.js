@@ -59,8 +59,6 @@ Spacewar.puntuationState.prototype = {
 				variableDeCentrado-=40
 		}
 
-
-
 		star = game.make.sprite(0, 0, 'star')
 		texture = game.add.renderTexture(1024, 600, 'texture')
 
