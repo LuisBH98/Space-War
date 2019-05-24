@@ -8,6 +8,7 @@ window.onload = function() {
 		DEBUG_MODE : false,
 		socket : null,
 		myPlayer : new Object(),
+		allPlayers: [],
 		otherPlayers : [],
 		projectiles : [],
 		enough_players: false
@@ -99,6 +100,7 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			if (typeof game.global.myPlayer.image !== 'undefined') {
+				
 				for (var player of msg.players) {
 					if (game.global.myPlayer.id == player.id) {
 						game.global.myPlayer.id = player.id;
@@ -112,6 +114,7 @@ window.onload = function() {
 						game.global.myPlayer.puntuacion = player.puntuacion;
 						if(game.global.myPlayer.perdedor){
 							console.log("Perdiste")
+							game.global.allPlayers=msg.players;
 							game.state.start('puntuationState')
 						}
 					} else {
@@ -130,6 +133,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
+								game.global.allPlayers=msg.players;
 								game.state.start('puntuationState')
 							}
 						} else {
@@ -149,6 +153,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
+								game.global.allPlayers=msg.players;
 								game.state.start('puntuationState')
 							}
 						}
