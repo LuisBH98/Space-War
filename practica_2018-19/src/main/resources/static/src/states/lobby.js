@@ -14,7 +14,7 @@ var zz = []
 
 // Botones alineados:
 var centerBotonsY = 300;
-var centerBotonsX = 50;
+var centerBotonsX = 100;
 var centerTextY = 315;
 var centerTextX = 50;
 
@@ -63,41 +63,17 @@ Spacewar.lobbyState.prototype = {
 			zz[i] = Math.floor(Math.random() * 1700) - 100;
 		}
 
-		botonJoin = game.add.button(game.world.centerX - centerBotonsX,
-				centerBotonsY, 'boton', joinFunc, this, 2, 1, 0);
-		botonJoin.scale.setTo(0.070, 0.070)
+		botonCreate = game.add.button(game.world.centerX-centerBotonsX,
+				centerBotonsY, 'create_room', joinFunc, this, 2, 1, 0);
+		botonCreate.scale.setTo(0.25, 0.25)
 
-		botonJoinNew = game.add.button(game.world.centerX - centerBotonsX,
-				centerBotonsY + 100, 'boton', joinFuncNew, this, 2, 1, 0);
-		botonJoinNew.scale.setTo(0.070, 0.070)
+		botonJoin = game.add.button(game.world.centerX-centerBotonsX,
+				centerBotonsY + 100, 'joinSpecific', joinFuncNew, this, 2, 1, 0);
+		botonJoin.scale.setTo(0.25, 0.25)
 
-		botonJoinAny = game.add.button(game.world.centerX - centerBotonsX,
-				centerBotonsY + 200, 'boton', joinFuncAny, this, 2, 1, 0);
-		botonJoinAny.scale.setTo(0.070, 0.070)
-
-		var createRoom = game.add.text(game.world.centerX + 40, centerTextY,
-				"Create room", {
-					font : "20px Arial",
-					fill : "#ffffff",
-					align : "center"
-				})
-		createRoom.anchor.setTo(0.5, 0.5)
-
-		var joinRoom = game.add.text(game.world.centerX + 65,
-				centerTextY + 100, "Join specific room", {
-					font : "20px Arial",
-					fill : "#ffffff",
-					align : "center"
-				})
-		joinRoom.anchor.setTo(0.5, 0.5)
-
-		var joinRoomAny = game.add.text(game.world.centerX + 48,
-				centerTextY + 200, "Join any room", {
-					font : "20px Arial",
-					fill : "#ffffff",
-					align : "center"
-				})
-		joinRoomAny.anchor.setTo(0.5, 0.5)
+		botonJoinAny = game.add.button(game.world.centerX-centerBotonsX,
+				centerBotonsY + 200, 'joinRoom', joinFuncAny, this, 2, 1, 0);
+		botonJoinAny.scale.setTo(0.25, 0.25)
 
 		function joinFunc() {
 			var input = window.prompt("Enter room name")

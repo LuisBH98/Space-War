@@ -23,6 +23,10 @@ Spacewar.preloadState.prototype = {
 		game.load.image('star','assets/images/star2.png')
 		game.load.image('puntuation','assets/images/hallOfFame.png')
 		game.load.image('back_button','assets/images/back_button.png')
+		game.load.image('create_room','assets/images/createRoom_button.png')
+		game.load.image('joinRoom','assets/images/joinAnyRoom_button.png')
+		game.load.image('joinSpecific','assets/images/joinSpecificRoom_button.png')
+		game.load.image('play','assets/images/play_button.png')
 	},
 
 	create : function() {

@@ -45,15 +45,11 @@ Spacewar.menuState.prototype = {
 			zz[i] = Math.floor(Math.random()*1700)-100;
 		}
 		
-		botonJoin = game.add.button(game.world.centerX - 95, 400, 'boton', createRoomFunc, this, 2, 1, 0);
-		botonJoin.scale.setTo(0.070, 0.070)
-		
-		text = game.add.text(game.world.centerX - 20, 420, "Play",{font:"30px Arial",fill:"#ffffff",align:"center"})
-		text.anchor.set(0.5)
+		playButton = game.add.button(game.world.centerX-75, game.world.centerY, 'play', enterLobbyFunc, this, 2, 1, 0);
+		playButton.scale.setTo(0.25, 0.25)
 		
 		
-		
-		function createRoomFunc(){
+		function enterLobbyFunc(){
 			this.ready = true;
 		}
 	},

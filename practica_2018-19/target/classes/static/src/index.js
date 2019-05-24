@@ -112,7 +112,7 @@ window.onload = function() {
 						game.global.myPlayer.puntuacion = player.puntuacion;
 						if(game.global.myPlayer.perdedor){
 							console.log("Perdiste")
-							game.state.start("puntuationState")
+							game.state.start('puntuationState')
 						}
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
@@ -130,7 +130,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
-								game.state.start("puntuationState")
+								game.state.start('puntuationState')
 							}
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX;
@@ -149,7 +149,7 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].id = player.id;
 							if(game.global.otherPlayers[player.id].perdedor){
 								console.log("Ganaste")
-								game.state.start("puntuationState")
+								game.state.start('puntuationState')
 							}
 						}
 					}
