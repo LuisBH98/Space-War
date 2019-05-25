@@ -122,8 +122,8 @@ window.onload = function() {
 						game.global.myPlayer.perdedor = player.perdedor;
 						game.global.myPlayer.ganador = player.ganador;
 						game.global.myPlayer.puntuacion = player.puntuacion;
-						if(game.global.myPlayer.perdedor){
-							console.log("Perdiste")
+						if(game.global.myPlayer.puntuacion==msg.puntuacionMaxima){
+							console.log("Ganaste")
 							game.state.start('puntuationState')
 						}
 					} else {
@@ -140,8 +140,8 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].perdedor = player.perdedor;
 							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
 							game.global.otherPlayers[player.id].id = player.id;
-							if(game.global.otherPlayers[player.id].perdedor){
-								console.log("Ganaste")
+							if(game.global.otherPlayers[player.id].puntuacion==msg.puntuacionMaxima){
+								console.log("Perdiste")
 								game.state.start('puntuationState')
 							}
 						} else {
@@ -159,8 +159,8 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].perdedor = player.perdedor;
 							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
 							game.global.otherPlayers[player.id].id = player.id;
-							if(game.global.otherPlayers[player.id].perdedor){
-								console.log("Ganaste")
+							if(game.global.otherPlayers[player.id].puntuacion==msg.puntuacionMaxima){
+								console.log("Perdiste")
 								game.state.start('puntuationState')
 							}
 						}

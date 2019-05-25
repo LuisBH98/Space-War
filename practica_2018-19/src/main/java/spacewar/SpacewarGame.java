@@ -208,6 +208,7 @@ public class SpacewarGame {
 			json.put("event", "GAME STATE UPDATE");
 			json.putPOJO("players", arrayNodePlayers);
 			json.putPOJO("projectiles", arrayNodeProjectiles);
+			json.putPOJO("puntuacionMaxima", MAX_PUNTUACION);
 			this.broadcast(json.toString());
 
 		} catch (Throwable ex) {
