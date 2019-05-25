@@ -114,9 +114,11 @@ Spacewar.gameState.prototype = {
 		
 		var style = { font: "35px Arial", fill: "#ffff00", align: "center" };
 
-	    this.t = game.add.text(game.world.centerX+225, 470, game.global.mensajeChat, style);
+	    this.mensaje1 = game.add.text(game.world.centerX+225, 470, game.global.mensajeChat, style);
 	    
-	    var chatTitulo = game.add.text(game.world.centerX+225, 430, "Chat:", style);
+	    this.mensaje2 = game.add.text(game.world.centerX+225, 430, "", style);
+	    
+	    var chatTitulo = game.add.text(game.world.centerX+225, 390, "Chat:", style);
 	    
 	    var jugadoresTitulo = game.add.text(game.world.centerX+225, 50, "Jugadores:", style);
 	    
@@ -172,7 +174,10 @@ Spacewar.gameState.prototype = {
 		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
 		
 		//Update mensaje de chat
-		this.t.setText(game.global.mensajeChat);
+		
+			this.mensaje1.setText(game.global.mensajeChat);
+			this.mensaje2.setText(game.global.mensajeChat2);
+		
 		
 		/*Update lista de jugadores
 		var j=0;

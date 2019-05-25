@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class SpacewarGame {
 
 	private final static int FPS = 30;
-	private final static int MAX_PUNTUACION = 2;
+	private final static int MAX_PUNTUACION = 3;
 	private final static int MIN_JUGADORES = 1;
 	private final static int MAX_LIFE = 100;
-	private final static int MAX_AMMO = 30;
+	private final static int MAX_AMMO = 50;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
@@ -137,16 +137,16 @@ public class SpacewarGame {
 			}
 			// Update players
 			for (Player player : getPlayers()) {
-				player.calculateMovement();
-				player.setPerdedor(false);
-				if (player.getPlayerLife() <= 0 || player.getGanador()) {
-					player.setPerdedor(true);
+				if (player.getPuntuacion() >= MAX_PUNTUACION) {
+					player.setGanador(true);
 					for (Player playerReset : getPlayers()) {
 						playerReset.setPlayerLife(MAX_LIFE);
 						playerReset.setPlayerAmmo(MAX_AMMO);
 					}
 					this.stopGameLoop();
 				}
+				player.calculateMovement();
+				player.setPerdedor(false);
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("player_name", player.getPlayerName());
@@ -169,8 +169,14 @@ public class SpacewarGame {
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
-						player.setPlayerLife(player.getPlayerLife() - 10);
 						projectile.setHit(true);
+						player.setPlayerLife(player.getPlayerLife() - 10);
+						if(player.getPlayerLife()<=0) {
+							projectile.getOwner().sumaPunto();
+							player.initSpaceship(Math.random() * 1000, Math.random() * 600, Math.random() * 360);
+							player.setPlayerLife(MAX_LIFE);
+							player.setPlayerAmmo(MAX_AMMO);
+						}
 						break;
 					}
 				}

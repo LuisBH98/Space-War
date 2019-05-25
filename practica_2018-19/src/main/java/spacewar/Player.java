@@ -27,7 +27,7 @@ public class Player extends Spaceship {
 		this.shipType = this.getRandomShipType();
 		this.player_name = this.getRandomPlayerName();
 		this.life = 100;
-		this.ammo = 30;
+		this.ammo = 50;
 		this.perdedor=false;
 		this.puntuacion=0;
 	}
