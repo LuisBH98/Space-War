@@ -7,6 +7,8 @@ window.onload = function() {
 		mensajeChat : "Sin hablar",
 		mensajeChat2: "",
 		primerMensaje : false,
+		mensajeChat3: "",
+		segundoMensaje : false,
 		FPS : 30,
 		DEBUG_MODE : false,
 		socket : null,
@@ -203,10 +205,16 @@ window.onload = function() {
 				console.log('[DEBUG] CHAT PLAYERS message recieved')
 				console.dir(msg)
 			}
-			if(game.global.primerMensaje){
+			if(game.global.segundoMensaje){
+				game.global.mensajeChat3=game.global.mensajeChat2;
 				game.global.mensajeChat2=game.global.mensajeChat;
 				game.global.mensajeChat=(msg.player+": "+msg.mensaje);
 				console.log("Mensaje enviado por "+msg.player+": "+msg.mensaje)
+			}else if(game.global.primerMensaje){
+				game.global.mensajeChat2=game.global.mensajeChat;
+				game.global.mensajeChat=(msg.player+": "+msg.mensaje);
+				console.log("Mensaje enviado por "+msg.player+": "+msg.mensaje)
+				game.global.segundoMensaje=true;
 			}
 			else{
 				game.global.primerMensaje=true;

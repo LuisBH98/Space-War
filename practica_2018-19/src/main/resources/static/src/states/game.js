@@ -12,6 +12,8 @@ var pos_nameY = 40
 var pos_lifeY = 25
 var pos_ammoX = 40
 var pos_ammoY = 35
+var alinearJugadoresYChat =500
+var lengthAnterior = 0
 
 Spacewar.gameState.prototype = {
 
@@ -90,7 +92,7 @@ Spacewar.gameState.prototype = {
 				game.global.myPlayer.player_name, style)
 		user_name.anchor.setTo(0.5, 0.5);
 
-		//Player life
+		// Player life
 		user_life = game.add.text(game.global.myPlayer.image.x,
 				game.global.myPlayer.y - pos_lifeY, "Life: " + game.global.myPlayer.life, 
 				{
@@ -100,7 +102,7 @@ Spacewar.gameState.prototype = {
 				})
 		user_life.anchor.setTo(0.5,0.5)
 		
-		//Player ammo
+		// Player ammo
 		user_ammo = game.add.text(game.global.myPlayer.image.x + pos_ammoX, game.global.myPlayer.y - pos_ammoY, "Ammo: " + game.global.myPlayer.ammo, 
 				{
 					font:"15px Arial",
@@ -110,30 +112,23 @@ Spacewar.gameState.prototype = {
 
 		game.camera.follow(game.global.myPlayer.image);
 
-		//Chat
+		// Chat
 		
-		var style = { font: "35px Arial", fill: "#ffff00", align: "center" };
+		var style = { font: "14px Arial", fill: "#ffff00", align: "center" };
 
-	    this.mensaje1 = game.add.text(game.world.centerX+225, 470, game.global.mensajeChat, style);
+	    this.mensaje1 = game.add.text(game.world.centerX-alinearJugadoresYChat, 470, game.global.mensajeChat, style);
 	    
-	    this.mensaje2 = game.add.text(game.world.centerX+225, 430, "", style);
+	    this.mensaje2 = game.add.text(game.world.centerX-alinearJugadoresYChat, 450, "", style);
 	    
-	    var chatTitulo = game.add.text(game.world.centerX+225, 390, "Chat:", style);
+	    this.mensaje3 = game.add.text(game.world.centerX-alinearJugadoresYChat, 430, "", style);
 	    
-	    var jugadoresTitulo = game.add.text(game.world.centerX+225, 50, "Jugadores:", style);
+	    var chatTitulo = game.add.text(game.world.centerX-alinearJugadoresYChat, 410, "Chat:", style);
 	    
-	    var nombresEnPantalla=new Array();
+	    var jugadoresTitulo = game.add.text(game.world.centerX-alinearJugadoresYChat, 20, "Jugadores:", style);
 	    
-	    var i = 100;
-	    var j = 0;
-		for(var jugador in game.global.allPlayers){
-			nombresEnPantalla[j]=game.add.text(game.world.centerX+225, i, jugador.player_name, {font: "35px Arial", fill: "#ffff00", align: "center"})
-			i+=50;
-			j+=1;
-		}
 		
-		botonChat= game.add.button(game.world.centerX-centerBotonsX+300,
-			centerBotonsY + 200, 'joinRoom', joinFuncChat, this, 2, 1, 0);
+		botonChat= game.add.button(game.world.centerX-alinearJugadoresYChat,
+			centerBotonsY+200, 'joinRoom', joinFuncChat, this, 2, 1, 0);
 		botonChat.scale.setTo(0.25, 0.25)
 
 		function joinFuncChat() {
@@ -168,24 +163,31 @@ Spacewar.gameState.prototype = {
 		user_life.x = game.global.myPlayer.image.x;
 		user_life.y = game.global.myPlayer.image.y - pos_lifeY;
 		
-		//Update player ammo
+		// Update player ammo
 		user_ammo.setText("Ammo: "+ game.global.myPlayer.ammo);
 		user_ammo.x = game.global.myPlayer.image.x + pos_ammoX;
 		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
 		
-		//Update mensaje de chat
+		// Update mensaje de chat
 		
 			this.mensaje1.setText(game.global.mensajeChat);
 			this.mensaje2.setText(game.global.mensajeChat2);
+			this.mensaje3.setText(game.global.mensajeChat3);
 		
 		
-		/*Update lista de jugadores
-		var j=0;
-		for(var jugador in game.global.allPlayers){
-			this.nombresEnPantalla[j].setText(jugador.player_name);
-			j+=1;
-		}*/
-
+		// Update lista de jugadores
+		if(game.global.allPlayers.length!==lengthAnterior){
+			var nombresEnPantalla=new Array();
+		    
+			var i = 50;
+		    var j = 0;
+			for(var jugador of game.global.allPlayers){
+				nombresEnPantalla[j]=game.add.text(game.world.centerX-alinearJugadoresYChat, i, jugador.player_name, {font: "14px Arial", fill: "#ffff00", align: "center"})
+				i+=30;
+				j+=1;
+			}
+		}
+		lengthAnterior=game.global.allPlayers.length
 
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
