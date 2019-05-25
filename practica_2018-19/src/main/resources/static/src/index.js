@@ -237,6 +237,15 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			game.global.myPlayer.player_name=msg.player_name;
+			break
+		case 'VARIABLES RESETED':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] RESET VARIABLES message recieved')
+				console.dir(msg)
+			}
+			game.global.myPlayer.ammo=msg.ammo;
+			game.global.myPlayer.life=msg.life;
+			game.global.myPlayer.puntuacion=msg.puntuation;
 		default :
 			console.dir(msg)
 			break

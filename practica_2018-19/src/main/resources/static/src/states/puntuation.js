@@ -17,10 +17,13 @@ Spacewar.puntuationState.prototype = {
 		}
 		let message = {
 			event: 'REMOVE ROOM',
-			room: game.global.myPlayer.room,
-			puntuacion: 0
+			room: game.global.myPlayer.room
 		}
 		game.global.socket.send(JSON.stringify(message));
+		let message2 = {
+				event: 'RESET VARIABLES'
+		}
+		game.global.socket.send(JSON.stringify(message2));
 		console.log(game.global.myPlayer.player_name)
 		console.log(game.global.myPlayer.perdedor)
 		console.log(game.global.myPlayer.life)
@@ -50,6 +53,17 @@ Spacewar.puntuationState.prototype = {
 
 		var variableDeCentrado = 150;
 		
+		
+		function ordenarJugadores(){
+			for(var i=0;i<game.global.allPlayers.length-1;i++){
+				var variableOrdenar=game.global.allPlayers[i]
+				if(variableOrdenar.puntuacion<game.global.allPlayers[i+1].puntuacion){
+					game.global.allPlayers[i]=game.global.allPlayers[i+1]
+					game.global.allPlayers[i+1]=variableOrdenar
+				}
+			}
+		}
+		ordenarJugadores();
 		for (var player of game.global.allPlayers) {
 				puntuacion = game.add.text(game.world.centerX, game.world.centerY - variableDeCentrado,
 					player.player_name + " .............................. " + player.puntuacion)
@@ -58,7 +72,7 @@ Spacewar.puntuationState.prototype = {
 				puntuacion.fill = "#FFDC00"
 				puntuacion.anchor.set(0.5)
 				puntuacion.align = 'center'
-				variableDeCentrado-=40
+				variableDeCentrado-= 40
 		}
 
 		star = game.make.sprite(0, 0, 'star')

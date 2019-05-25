@@ -25,6 +25,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
 	private Lock sendMessagePermit = new ReentrantLock();
+	private final static int MIN_PUNTUACION = 0;
+	private final static int MAX_LIFE = 100;
+	private final static int MAX_FUEL = 100;
 	
 
 	@Override
@@ -157,8 +160,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				break;
 			case "REMOVE ROOM":
 				nombreSala = node.get("room").asText();
-				player.setPuntuacion(node.get("puntuacion").asInt());
-				salas.get(nombreSala).removePlayer(player);
 				salas.remove(nombreSala);
 				break;
 			case "CHAT ROOM":
@@ -176,6 +177,20 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event", "NEW NAME CLIENT");
 				msg.put("player_name", nombrePlayer);
 				player.setPlayerName(nombrePlayer);
+				sendMessagePermit.lock();
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				sendMessagePermit.unlock();
+				break;
+			case "RESET VARIABLES":
+				player.setGanador(false);
+				player.setPlayerAmmo(MAX_AMMO);
+				player.setPlayerFuel(MAX_FUEL);
+				player.setPlayerLife(MAX_LIFE);
+				player.setPuntuacion(MIN_PUNTUACION);
+				msg.put("event", "VARIABLES RESETED");
+				msg.put("ammo", MAX_AMMO);
+				msg.put("life", MAX_LIFE);
+				msg.put("puntuation", MIN_PUNTUACION);
 				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				sendMessagePermit.unlock();

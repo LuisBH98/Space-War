@@ -130,24 +130,19 @@ public class SpacewarGame {
 		Set<Integer> bullets2Remove = new HashSet<>();
 		boolean removeBullets = false;
 
-		
 		try {
-			if(this.numPlayers.get()==MIN_JUGADORES) {
+			if (this.numPlayers.get() == MIN_JUGADORES) {
 				this.stopGameLoop();
 			}
 			// Update players
 			for (Player player : getPlayers()) {
+				ObjectNode jsonPlayer = mapper.createObjectNode();
 				if (player.getPuntuacion() >= MAX_PUNTUACION) {
 					player.setGanador(true);
-					for (Player playerReset : getPlayers()) {
-						playerReset.setPlayerLife(MAX_LIFE);
-						playerReset.setPlayerAmmo(MAX_AMMO);
-					}
 					this.stopGameLoop();
 				}
 				player.calculateMovement(player.getPlayerFuel());
 				player.setPerdedor(false);
-				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("player_name", player.getPlayerName());
 				jsonPlayer.put("life", player.getPlayerLife());
@@ -157,11 +152,12 @@ public class SpacewarGame {
 				jsonPlayer.put("posY", player.getPosY());
 				jsonPlayer.put("facingAngle", player.getFacingAngle());
 				jsonPlayer.put("perdedor", player.getPerdedor());
+				jsonPlayer.put("ganador", player.getGanador());
 				jsonPlayer.put("puntuacion", player.getPuntuacion());
 				jsonPlayer.put("fuel", player.getPlayerFuel());
 				arrayNodePlayers.addPOJO(jsonPlayer);
 			}
-			
+
 			// Update bullets and handle collision
 			for (Projectile projectile : getProjectiles()) {
 				projectile.applyVelocity2Position();
@@ -172,7 +168,7 @@ public class SpacewarGame {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
 						projectile.setHit(true);
 						player.setPlayerLife(player.getPlayerLife() - 10);
-						if(player.getPlayerLife()<=0) {
+						if (player.getPlayerLife() <= 0) {
 							projectile.getOwner().sumaPunto();
 							player.initSpaceship(Math.random() * 1000, Math.random() * 600, Math.random() * 360);
 							player.setPlayerLife(MAX_LIFE);
@@ -209,7 +205,7 @@ public class SpacewarGame {
 			json.put("event", "GAME STATE UPDATE");
 			json.putPOJO("players", arrayNodePlayers);
 			json.putPOJO("projectiles", arrayNodeProjectiles);
-			json.putPOJO("puntuacionMaxima", MAX_PUNTUACION);
+			json.putPOJO("puntuacionMaxima",MAX_PUNTUACION);
 			this.broadcast(json.toString());
 
 		} catch (Throwable ex) {
