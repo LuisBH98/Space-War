@@ -19,6 +19,7 @@ public class Player extends Spaceship {
 	private int life;
 	private int ammo;
 	private int puntuacion;
+	private int fuel;
 	public Lock sendMessagePlayer = new ReentrantLock();
 
 	public Player(int playerId, WebSocketSession session) {
@@ -28,8 +29,17 @@ public class Player extends Spaceship {
 		this.player_name = this.getRandomPlayerName();
 		this.life = 100;
 		this.ammo = 50;
+		this.fuel = 100;
 		this.perdedor=false;
 		this.puntuacion=0;
+	}
+	
+	public int getPlayerFuel() {
+		return this.fuel;
+	}
+	
+	public void setPlayerFuel(int fuel) {
+		this.fuel = fuel;
 	}
 	
 	public int getPlayerLife() {

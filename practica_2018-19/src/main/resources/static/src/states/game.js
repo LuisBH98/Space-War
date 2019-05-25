@@ -8,6 +8,7 @@ Spacewar.gameState = function(game) {
 var user_name;
 var user_live;
 var user_ammo;
+var user_fuel;
 var pos_nameY = 40
 var pos_lifeY = 25
 var pos_ammoX = 40
@@ -75,6 +76,7 @@ Spacewar.gameState.prototype = {
 		this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 		this.dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 		this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
 		// Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.W,
@@ -110,6 +112,10 @@ Spacewar.gameState.prototype = {
 					align:"center",
 				})
 
+		//Player fuel
+		user_fuel = game.add.text(game.global.myPlayer.image.x + pos_ammoX, game.global.myPlayer.y + 10,
+				"Fuel: "+game.global.myPlayer.fuel+"%",{font:"15px Arial",fill:"#ffffff",align:"center"})
+		
 		game.camera.follow(game.global.myPlayer.image);
 
 		// Chat
@@ -168,6 +174,11 @@ Spacewar.gameState.prototype = {
 		user_ammo.x = game.global.myPlayer.image.x + pos_ammoX;
 		user_ammo.y = game.global.myPlayer.image.y - pos_ammoY;
 		
+		//Update player fuel
+		user_fuel.setText("Fuel: "+game.global.myPlayer.fuel+"%")
+		user_fuel.x = game.global.myPlayer.image.x + pos_ammoX;
+		user_fuel.y = game.global.myPlayer.image.y + 10;
+		
 		// Update mensaje de chat
 		
 			this.mensaje1.setText(game.global.mensajeChat);
@@ -196,7 +207,8 @@ Spacewar.gameState.prototype = {
 			thrust : false,
 			brake : false,
 			rotLeft : false,
-			rotRight : false
+			rotRight : false,
+			fast: false
 		}
 
 		msg.bullet = false
@@ -209,6 +221,9 @@ Spacewar.gameState.prototype = {
 			msg.movement.rotLeft = true;
 		if (this.dKey.isDown)
 			msg.movement.rotRight = true;
+		if(this.shiftKey.isDown){
+			msg.movement.fast = true;
+		}
 		if (this.spaceKey.isDown) {
 			if(game.global.myPlayer.ammo > 0){
 				msg.bullet = this.fireBullet()

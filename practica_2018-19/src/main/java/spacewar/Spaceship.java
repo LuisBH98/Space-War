@@ -13,6 +13,7 @@ public class Spaceship extends SpaceObject {
 		boolean brake = false;
 		boolean rotLeft = false;
 		boolean rotRight = false;
+		boolean fast = false;
 	}
 
 	private LastMovement lastMovement;
@@ -30,19 +31,25 @@ public class Spaceship extends SpaceObject {
 		lastMovement = new LastMovement();
 	}
 
-	public void loadMovement(boolean thrust, boolean brake, boolean rotLeft, boolean rotRight) {
+	public void loadMovement(boolean thrust, boolean brake, boolean rotLeft, boolean rotRight,boolean fast) {
 		this.lastMovement.thrust = thrust;
 		this.lastMovement.brake = brake;
 		this.lastMovement.rotLeft = rotLeft;
 		this.lastMovement.rotRight = rotRight;
+		this.lastMovement.fast = fast;
 	}
 
-	public void calculateMovement() {
+	public void calculateMovement(int fuel) {
 		this.multVelocity(SPACE_FRICTION);
 
 		if (this.lastMovement.thrust) {
 			this.incVelocity(Math.cos(this.getFacingAngle() * Math.PI / 180) * SPACESHIP_SPEED,
 					Math.sin(this.getFacingAngle() * Math.PI / 180) * SPACESHIP_SPEED);
+		}
+		
+		if(this.lastMovement.thrust && this.lastMovement.fast && fuel > 0) {
+			this.incVelocity((Math.cos(this.getFacingAngle()*Math.PI/180)*SPACESHIP_SPEED)*2,
+					(Math.sin(this.getFacingAngle()*Math.PI/180)*SPACESHIP_SPEED)*2);
 		}
 
 		if (this.lastMovement.brake) {

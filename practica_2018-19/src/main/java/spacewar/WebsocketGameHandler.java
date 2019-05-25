@@ -38,6 +38,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("player_name", player.getPlayerName());
 		msg.put("life", player.getPlayerLife());
 		msg.put("ammo", player.getPlayerAmmo());
+		msg.put("fuel", player.getPlayerFuel());
 		sendMessagePermit.lock();
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
 		sendMessagePermit.unlock();
@@ -60,6 +61,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("player_name", player.getPlayerName());
 				msg.put("life", player.getPlayerLife());
 				msg.put("ammo", player.getPlayerAmmo());
+				msg.put("fuel", player.getPlayerFuel());
 				sendMessagePermit.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				sendMessagePermit.unlock();
@@ -134,7 +136,15 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.loadMovement(node.path("movement").get("thrust").asBoolean(),
 						node.path("movement").get("brake").asBoolean(),
 						node.path("movement").get("rotLeft").asBoolean(),
-						node.path("movement").get("rotRight").asBoolean());
+						node.path("movement").get("rotRight").asBoolean(),
+						node.path("movement").get("fast").asBoolean());
+				if(node.path("movement").get("fast").asBoolean() && player.getPlayerFuel() > 0 && node.path("movement").get("thrust").asBoolean()) {
+					player.setPlayerFuel(player.getPlayerFuel() - 1);
+				}else{
+					if(player.getPlayerFuel() < 100 && !node.path("movement").get("fast").asBoolean()){
+						player.setPlayerFuel(player.getPlayerFuel() + 1);
+					}
+				}
 				if (node.path("bullet").asBoolean()) {
 					player.setPlayerAmmo(player.getPlayerAmmo() - 1);
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());

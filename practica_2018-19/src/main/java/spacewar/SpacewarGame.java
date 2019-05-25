@@ -145,7 +145,7 @@ public class SpacewarGame {
 					}
 					this.stopGameLoop();
 				}
-				player.calculateMovement();
+				player.calculateMovement(player.getPlayerFuel());
 				player.setPerdedor(false);
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
@@ -158,6 +158,7 @@ public class SpacewarGame {
 				jsonPlayer.put("facingAngle", player.getFacingAngle());
 				jsonPlayer.put("perdedor", player.getPerdedor());
 				jsonPlayer.put("puntuacion", player.getPuntuacion());
+				jsonPlayer.put("fuel", player.getPlayerFuel());
 				arrayNodePlayers.addPOJO(jsonPlayer);
 			}
 			

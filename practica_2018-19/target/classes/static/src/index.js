@@ -53,6 +53,7 @@ window.onload = function() {
 			game.global.myPlayer.player_name = msg.player_name;
 			game.global.myPlayer.life = msg.life;
 			game.global.myPlayer.ammo = msg.ammo;
+			game.global.myPlayer.fuel = msg.fuel;
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 				console.log('[DEBUG] Name assigned to player: ' + game.global.myPlayer.player_name);
@@ -122,6 +123,7 @@ window.onload = function() {
 						game.global.myPlayer.perdedor = player.perdedor;
 						game.global.myPlayer.ganador = player.ganador;
 						game.global.myPlayer.puntuacion = player.puntuacion;
+						game.global.myPlayer.fuel = player.fuel;
 						if(game.global.myPlayer.puntuacion==msg.puntuacionMaxima){
 							console.log("Ganaste")
 							game.state.start('puntuationState')
@@ -140,6 +142,8 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].perdedor = player.perdedor;
 							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
 							game.global.otherPlayers[player.id].id = player.id;
+							game.global.otherPlayers[player.id].fuel = game.add.text(player.posX+pos_ammoX,player.posY+10,"Fuel: " + player.fuel+"%",{font:"15px Arial",fill:"#ffffff"})
+							
 							if(game.global.otherPlayers[player.id].puntuacion==msg.puntuacionMaxima){
 								console.log("Perdiste")
 								game.state.start('puntuationState')
@@ -159,6 +163,9 @@ window.onload = function() {
 							game.global.otherPlayers[player.id].perdedor = player.perdedor;
 							game.global.otherPlayers[player.id].puntuacion = player.puntuacion;
 							game.global.otherPlayers[player.id].id = player.id;
+							game.global.otherPlayers[player.id].fuel.x = game.global.otherPlayers[player.id].image.x+pos_ammoX;
+							game.global.otherPlayers[player.id].fuel.y = game.global.otherPlayers[player.id].image.y + 10;
+							game.global.otherPlayers[player.id].fuel.setText("Fuel: " + player.fuel+"%")
 							if(game.global.otherPlayers[player.id].puntuacion==msg.puntuacionMaxima){
 								console.log("Perdiste")
 								game.state.start('puntuationState')
@@ -198,6 +205,7 @@ window.onload = function() {
 			game.global.otherPlayers[msg.id].player_name.destroy()
 			game.global.otherPlayers[msg.id].life.destroy()
 			game.global.otherPlayers[msg.id].ammo.destroy()
+			game.global.otherPlayers[msg.id].fuel.destroy()
 			delete game.global.otherPlayers[msg.id]
 			break
 		case 'CHAT':
