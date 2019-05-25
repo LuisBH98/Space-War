@@ -12,8 +12,6 @@ var pos_nameY = 40
 var pos_lifeY = 25
 var pos_ammoX = 40
 var pos_ammoY = 35
-var alinearJugadoresYChat =500
-var lengthAnterior = 0
 
 Spacewar.gameState.prototype = {
 
@@ -114,15 +112,25 @@ Spacewar.gameState.prototype = {
 
 		//Chat
 		
-		var style = { font: "14px Arial", fill: "#ffff00", align: "center" };
+		var style = { font: "35px Arial", fill: "#ffff00", align: "center" };
 
-	    this.t = game.add.text(game.world.centerX-alinearJugadoresYChat, 470, game.global.mensajeChat, style);
+	    this.t = game.add.text(game.world.centerX+225, 470, game.global.mensajeChat, style);
 	    
-	    var chatTitulo = game.add.text(game.world.centerX-alinearJugadoresYChat, 430, "Chat:", style);
+	    var chatTitulo = game.add.text(game.world.centerX+225, 430, "Chat:", style);
 	    
-	    var jugadoresTitulo = game.add.text(game.world.centerX-alinearJugadoresYChat, 20, "Jugadores:", style);
+	    var jugadoresTitulo = game.add.text(game.world.centerX+225, 50, "Jugadores:", style);
+	    
+	    var nombresEnPantalla=new Array();
+	    
+	    var i = 100;
+	    var j = 0;
+		for(var jugador in game.global.allPlayers){
+			nombresEnPantalla[j]=game.add.text(game.world.centerX+225, i, jugador.player_name, {font: "35px Arial", fill: "#ffff00", align: "center"})
+			i+=50;
+			j+=1;
+		}
 		
-		botonChat= game.add.button(game.world.centerX-alinearJugadoresYChat,
+		botonChat= game.add.button(game.world.centerX-centerBotonsX+300,
 			centerBotonsY + 200, 'joinRoom', joinFuncChat, this, 2, 1, 0);
 		botonChat.scale.setTo(0.25, 0.25)
 
@@ -166,19 +174,6 @@ Spacewar.gameState.prototype = {
 		//Update mensaje de chat
 		this.t.setText(game.global.mensajeChat);
 		
-		
-		if(game.global.allPlayers.length!==lengthAnterior){
-			var nombresEnPantalla=new Array();
-		    
-		    var i = 50;
-		    var j = 0;
-			for(var jugador of game.global.allPlayers){
-				nombresEnPantalla[j]=game.add.text(game.world.centerX-alinearJugadoresYChat, i, jugador.player_name, {font: "14px Arial", fill: "#ffff00", align: "center"})
-				i+=30;
-				j+=1;
-			}
-		}
-		lengthAnterior=game.global.allPlayers.length
 		/*Update lista de jugadores
 		var j=0;
 		for(var jugador in game.global.allPlayers){
