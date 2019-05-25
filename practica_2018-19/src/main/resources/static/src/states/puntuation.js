@@ -18,7 +18,8 @@ Spacewar.puntuationState.prototype = {
 		}
 		let message = {
 			event: 'REMOVE ROOM',
-			room: game.global.myPlayer.room
+			room: game.global.myPlayer.room,
+			puntuacion: 0
 		}
 		game.global.socket.send(JSON.stringify(message));
 		console.log(game.global.myPlayer.player_name)

@@ -75,6 +75,7 @@ Spacewar.gameState.prototype = {
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
 		this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 		this.dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+		this.rKey = game.input.keyboard.addKey(Phaser.Keyboard.R);
 		this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
@@ -212,6 +213,7 @@ Spacewar.gameState.prototype = {
 		}
 
 		msg.bullet = false
+		msg.recharge = false
 
 		if (this.wKey.isDown)
 			msg.movement.thrust = true;
@@ -228,6 +230,9 @@ Spacewar.gameState.prototype = {
 			if(game.global.myPlayer.ammo > 0){
 				msg.bullet = this.fireBullet()
 			}
+		}
+		if(this.rKey.isDown){
+			msg.recharge = true
 		}
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")

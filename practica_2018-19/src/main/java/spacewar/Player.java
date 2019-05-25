@@ -66,6 +66,10 @@ public class Player extends Spaceship {
 		return this.puntuacion;
 	}
 	
+	public void setPuntuacion(int puntuacion) {
+		this.puntuacion = puntuacion;
+	}
+	
 	public void sumaPunto() {
 		this.puntuacion++;
 	}
