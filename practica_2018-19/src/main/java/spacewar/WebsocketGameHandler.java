@@ -20,6 +20,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 	public ConcurrentHashMap<String, SpacewarGame> salas = new ConcurrentHashMap<>();
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
+	private final static int MAX_AMMO = 50;
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
@@ -150,9 +151,14 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
 					salas.get(nombreSala).addProjectile(projectile.getId(), projectile);
 				}
+				if(player.getPlayerAmmo() < MAX_AMMO && node.get("recharge").asBoolean()) {
+					player.setPlayerAmmo(50);
+				}
 				break;
 			case "REMOVE ROOM":
 				nombreSala = node.get("room").asText();
+				player.setPuntuacion(node.get("puntuacion").asInt());
+				salas.get(nombreSala).removePlayer(player);
 				salas.remove(nombreSala);
 				break;
 			case "CHAT ROOM":
