@@ -4,7 +4,6 @@ Spacewar.puntuationState = function (game) {
 var puntuacion1 = null
 var puntuacion2 = null
 var posY = 30
-var variableDeCentrado = 150;
 
 Spacewar.puntuationState.prototype = {
 
@@ -48,6 +47,8 @@ Spacewar.puntuationState.prototype = {
 		title.anchor.setTo(0.5, 0.5)
 		title.scale.setTo(1, 1)
 
+		var variableDeCentrado = 150;
+		
 		for (var player of game.global.allPlayers) {
 				puntuacion = game.add.text(game.world.centerX, game.world.centerY - variableDeCentrado,
 					player.player_name + " .............................. " + player.puntuacion)
@@ -73,6 +74,7 @@ Spacewar.puntuationState.prototype = {
 		function backToMenu() {
 			game.global.myPlayer = new Object();
 			game.global.otherPlayers = [];
+			game.global.allPlayers=[];
 			game.state.start('lobbyState')
 		}
 	},
