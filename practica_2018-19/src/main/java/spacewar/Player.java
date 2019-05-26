@@ -82,7 +82,7 @@ public class Player extends Spaceship {
 		return this.perdedor;
 	}
 
-	public void setGanador(boolean perdedor) {
+	public void setGanador(boolean ganador) {
 		this.ganador = ganador;
 	}
 	

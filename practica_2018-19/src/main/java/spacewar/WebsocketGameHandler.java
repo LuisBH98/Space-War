@@ -24,7 +24,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
-	private Lock sendMessagePermit = new ReentrantLock();
+	private Lock adquirirPermiso = new ReentrantLock();
 	private final static int MIN_PUNTUACION = 0;
 	private final static int MAX_LIFE = 100;
 	private final static int MAX_FUEL = 100;
@@ -32,8 +32,11 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		Player player = new Player(playerId.incrementAndGet(), session);
-		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
+		adquirirPermiso.lock();
+		WebSocketSession sessionLocal=session;
+		adquirirPermiso.unlock();
+		Player player = new Player(playerId.incrementAndGet(), sessionLocal);
+		sessionLocal.getAttributes().put(PLAYER_ATTRIBUTE, player);
 
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
@@ -43,9 +46,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("life", player.getPlayerLife());
 		msg.put("ammo", player.getPlayerAmmo());
 		msg.put("fuel", player.getPlayerFuel());
-		sendMessagePermit.lock();
+		player.sendMessagePlayer.lock();
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
-		sendMessagePermit.unlock();
+		player.sendMessagePlayer.unlock();
 
 	}
 
@@ -66,9 +69,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("life", player.getPlayerLife());
 				msg.put("ammo", player.getPlayerAmmo());
 				msg.put("fuel", player.getPlayerFuel());
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "CREATE NEW ROOM":
 				nombreSala = node.get("room").asText();
@@ -82,9 +85,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("event", "ANOTHER ROOM NAME");
 					msg.put("room", nombreSala);
 				}
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "JOIN ANY ROOM":
 				boolean addedPlayer = false;
@@ -92,7 +95,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					if (salas.get(clave).available()) {
 						msg.put("event", "JOIN ROOM");
 						msg.put("room", clave);
+						player.sendMessagePlayer.lock();
 						salas.get(clave).addPlayer(player);
+						player.sendMessagePlayer.unlock();
 						addedPlayer = true;
 						break;
 					}
@@ -100,9 +105,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				if (!addedPlayer) {
 					msg.put("event", "ROOMS OCCUPIED");
 				}
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "JOIN SPECIFIC ROOM":
 				nombreSala = node.get("room").asText();
@@ -110,7 +115,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					if (salas.get(nombreSala).available()) {
 						msg.put("event", "JOIN ROOM");
 						msg.put("room", nombreSala);
+						player.sendMessagePlayer.lock();
 						salas.get(nombreSala).addPlayer(player);
+						player.sendMessagePlayer.unlock();
 					} else {
 						msg.put("event", "ROOMS OCCUPIED");
 						msg.put("room", nombreSala);
@@ -119,9 +126,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("event", "NEED TO CREATE ROOMS");
 					msg.put("room", nombreSala);
 				}
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "PLAYERS":
 				nombreSala = node.get("room").asText();
@@ -131,9 +138,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				}else {
 					msg.put("event", "NEED TO CREATE ROOMS");
 				}
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "UPDATE MOVEMENT":
 				nombreSala = node.get("room").asText();
@@ -169,7 +176,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event", "CHAT");
 				msg.put("player",nombrePlayer);
 				msg.put("mensaje",mensaje);
-
+				
 				salas.get(nombreSala).broadcast(msg.toString());
 				break;
 			case "NEW NAME":
@@ -177,9 +184,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event", "NEW NAME CLIENT");
 				msg.put("player_name", nombrePlayer);
 				player.setPlayerName(nombrePlayer);
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			case "RESET VARIABLES":
 				player.setGanador(false);
@@ -191,9 +198,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("ammo", MAX_AMMO);
 				msg.put("life", MAX_LIFE);
 				msg.put("puntuation", MIN_PUNTUACION);
-				sendMessagePermit.lock();
+				player.sendMessagePlayer.lock();
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
-				sendMessagePermit.unlock();
+				player.sendMessagePlayer.unlock();
 				break;
 			default:
 				break;
@@ -208,6 +215,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
+		player.sendMessagePlayer.lock();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
 				salas.get(clave).removePlayer(player);
