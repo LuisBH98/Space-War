@@ -31,7 +31,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	
 
 	@Override
-	public synchronized void afterConnectionEstablished(WebSocketSession session) throws Exception {
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
 
@@ -50,7 +50,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	}
 
 	@Override
-	protected  synchronized void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		try {
 			JsonNode node = mapper.readTree(message.getPayload());
 			ObjectNode msg = mapper.createObjectNode();
