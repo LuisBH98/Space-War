@@ -96,7 +96,7 @@ window.onload = function() {
 			game.state.start('lobbyState')
 			break
 		case 'NUM_PLAYERS':
-			if(msg.players >= 1){
+			if(msg.players == 2){
 				game.global.enough_players = true;
 			}
 			break;
