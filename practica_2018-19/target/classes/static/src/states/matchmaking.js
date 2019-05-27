@@ -26,7 +26,7 @@ Spacewar.matchmakingState.prototype = {
 
 	create : function() {
 		game.add.sprite(0,0,'back')
-		var title = game.add.sprite(game.world.centerX,50,'title')
+		var title = game.add.sprite(game.world.centerX,50,'salaEspera')
 		title.anchor.setTo(0.5,0.5)
 		title.scale.setTo(1,1)
 		
