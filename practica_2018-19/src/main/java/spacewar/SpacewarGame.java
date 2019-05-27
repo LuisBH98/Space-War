@@ -108,19 +108,17 @@ public class SpacewarGame {
 
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
-			player.sendMessagePlayer.lock();
 			try {
-				player.getSession().sendMessage(new TextMessage(message.toString()));
+				player.sendMessagePlayer.lock();
+				if(player.getSession().isOpen()) {
+					player.getSession().sendMessage(new TextMessage(message.toString()));
+				}
+				player.sendMessagePlayer.unlock();
 			} catch (Throwable ex) {
 				System.err.println("Execption sending message to player " + player.getSession().getId());
 				ex.printStackTrace(System.err);
 				this.removePlayer(player);
-				ObjectNode msg = mapper.createObjectNode();
-				msg.put("event", "REMOVE PLAYER");
-				msg.put("id", player.getPlayerId());
-				this.broadcast(msg.toString());
 			}
-			player.sendMessagePlayer.unlock();
 		}
 	}
 

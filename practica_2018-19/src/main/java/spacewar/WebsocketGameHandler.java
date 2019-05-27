@@ -176,7 +176,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event", "CHAT");
 				msg.put("player",nombrePlayer);
 				msg.put("mensaje",mensaje);
-				
+
 				salas.get(nombreSala).broadcast(msg.toString());
 				break;
 			case "NEW NAME":
