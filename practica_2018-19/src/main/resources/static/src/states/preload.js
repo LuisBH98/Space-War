@@ -30,6 +30,9 @@ Spacewar.preloadState.prototype = {
 		game.load.image('salaEspera','assets/images/salaEspera.png')
 		game.load.image('chat','assets/images/chat.png')
 		game.load.image('nombre','assets/images/nombre.png')
+		game.load.image('choose_name','assets/images/name_button.png')
+		game.load.image('send_message','assets/images/message_button.png')
+		game.load.image('waiting','assets/images/matchmaking_text.png')
 	},
 
 	create : function() {

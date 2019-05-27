@@ -48,9 +48,10 @@ Spacewar.menuState.prototype = {
 		playButton = game.add.button(game.world.centerX-75, game.world.centerY, 'play', enterLobbyFunc, this, 2, 1, 0);
 		playButton.scale.setTo(0.25, 0.25)
 		
-		introducirNombre= game.add.button(game.world.centerX-centerBotonsX,
-			centerBotonsY -200, 'nombre', enterUserName, this, 2, 1, 0);
-		introducirNombre.scale.setTo(1, 1)
+		introducirNombre= game.add.button(game.world.centerX,
+			centerBotonsY -180, 'choose_name', enterUserName, this, 2, 1, 0);
+		introducirNombre.anchor.setTo(0.5,0.5)
+		introducirNombre.scale.setTo(0.25, 0.25)
 		
 		function enterLobbyFunc(){
 			this.ready = true;

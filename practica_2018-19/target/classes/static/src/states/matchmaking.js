@@ -26,9 +26,9 @@ Spacewar.matchmakingState.prototype = {
 
 	create : function() {
 		game.add.sprite(0,0,'back')
-		var title = game.add.sprite(game.world.centerX,50,'salaEspera')
+		var title = game.add.sprite(game.world.centerX,50,'waiting')
 		title.anchor.setTo(0.5,0.5)
-		title.scale.setTo(1,1)
+		title.scale.setTo(0.25,0.25)
 		
 		star = game.make.sprite(0,0,'star')
 		texture = game.add.renderTexture(1024,600,'texture')

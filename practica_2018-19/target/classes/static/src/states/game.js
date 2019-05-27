@@ -135,7 +135,7 @@ Spacewar.gameState.prototype = {
 	    
 		
 		botonChat= game.add.button(game.world.centerX-alinearJugadoresYChat,
-			centerBotonsY+200, 'chat', chatFunc, this, 2, 1, 0);
+			centerBotonsY+200, 'send_message', chatFunc, this, 2, 1, 0);
 		botonChat.scale.setTo(0.25, 0.25)
 
 		function chatFunc() {
