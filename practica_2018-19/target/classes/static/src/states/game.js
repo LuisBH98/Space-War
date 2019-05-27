@@ -135,24 +135,24 @@ Spacewar.gameState.prototype = {
 	    
 		
 		botonChat= game.add.button(game.world.centerX-alinearJugadoresYChat,
-			centerBotonsY+200, 'chat', joinFuncChat, this, 2, 1, 0);
+			centerBotonsY+200, 'chat', chatFunc, this, 2, 1, 0);
 		botonChat.scale.setTo(0.25, 0.25)
 
-		function joinFuncChat() {
-			var input = window.prompt("Enter a chat message")
+		function chatFunc() {
+			var input_message = window.prompt("Enter a chat message")
 			
 			if (input === null){
 				return
 			}
 			
-			while (input===''){
-				input = window.prompt("Enter a chat message")
+			while (input_message ===''){
+				input_message = window.prompt("Enter a chat message")
 				
 			}
 			let message = {
 				event : 'CHAT ROOM',
 				player: game.global.myPlayer.player_name,
-				mensaje: input,
+				mensaje: input_message,
 				room: game.global.myPlayer.room
 			}
 			game.global.socket.send(JSON.stringify(message))

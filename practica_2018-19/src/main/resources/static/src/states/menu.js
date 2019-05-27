@@ -49,27 +49,27 @@ Spacewar.menuState.prototype = {
 		playButton.scale.setTo(0.25, 0.25)
 		
 		introducirNombre= game.add.button(game.world.centerX-centerBotonsX,
-			centerBotonsY -200, 'nombre', joinFuncIntroducirNombre, this, 2, 1, 0);
+			centerBotonsY -200, 'nombre', enterUserName, this, 2, 1, 0);
 		introducirNombre.scale.setTo(1, 1)
 		
 		function enterLobbyFunc(){
 			this.ready = true;
 		}
 
-		function joinFuncIntroducirNombre() {
-			var input = window.prompt("Enter a chat message")
+		function enterUserName() {
+			var name_input = window.prompt("Choose a name")
 			
-			if (input === null){
+			if (name_input === null){
 				return
 			}
 			
-			while (input===''){
-				input = window.prompt("Enter a chat message")
+			while (name_input===''){
+				input = window.prompt("Choose a name")
 				
 			}
 			let message = {
 				event : 'NEW NAME',
-				player_name: input,
+				player_name: name_input,
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}
