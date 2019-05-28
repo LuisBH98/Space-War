@@ -141,7 +141,7 @@ Spacewar.gameState.prototype = {
 		function chatFunc() {
 			var input_message = window.prompt("Enter a chat message")
 			
-			if (input === null){
+			if (input_message === null){
 				return
 			}
 			
@@ -149,13 +149,13 @@ Spacewar.gameState.prototype = {
 				input_message = window.prompt("Enter a chat message")
 				
 			}
-			let message = {
+			let chatRoom = {
 				event : 'CHAT ROOM',
 				player: game.global.myPlayer.player_name,
 				mensaje: input_message,
 				room: game.global.myPlayer.room
 			}
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(chatRoom))
 		}
 	},
 

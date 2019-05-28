@@ -25,7 +25,7 @@ public class SpacewarGame {
 	private final static int MAX_PUNTUACION = 3;
 	private final static int MIN_JUGADORES = 1;
 	private final static int MAX_LIFE = 100;
-	private final static int MAX_AMMO = 50;
+	private final static int MAX_AMMO = 20;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
@@ -115,6 +115,7 @@ public class SpacewarGame {
 				}
 				player.sendMessagePlayer.unlock();
 			} catch (Throwable ex) {
+				player.sendMessagePlayer.unlock();
 				System.err.println("Execption sending message to player " + player.getSession().getId());
 				ex.printStackTrace(System.err);
 				this.removePlayer(player);

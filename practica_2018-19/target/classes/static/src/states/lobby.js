@@ -14,7 +14,6 @@ var zz = []
 
 // Botones alineados:
 var centerBotonsY = 300;
-var centerBotonsX = 100;
 var centerTextY = 315;
 var centerTextX = 50;
 
@@ -35,10 +34,10 @@ Spacewar.lobbyState.prototype = {
 			if (game.global.DEBUG_MODE) {
 				console.log("[DEBUG] Forcing joining server...");
 			}
-			let message = {
+			let join = {
 				event : 'JOIN'
 			}
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(join))
 		}
 	},
 
@@ -63,65 +62,68 @@ Spacewar.lobbyState.prototype = {
 			zz[i] = Math.floor(Math.random() * 1700) - 100;
 		}
 
-		botonCreate = game.add.button(game.world.centerX-centerBotonsX,
-				centerBotonsY, 'create_room', joinFunc, this, 2, 1, 0);
-		botonCreate.scale.setTo(0.25, 0.25)
+		botonCreateRoom = game.add.button(game.world.centerX,
+				centerBotonsY, 'create_room', createRoom, this, 2, 1, 0);
+		botonCreateRoom.scale.setTo(0.25, 0.25)
+		botonCreateRoom.anchor.setTo(0.5,0.5)
+		
+		botonSpecificRoom = game.add.button(game.world.centerX,
+				centerBotonsY + 100, 'joinSpecific', joinSpecificRoom, this, 2, 1, 0);
+		botonSpecificRoom.scale.setTo(0.25, 0.25)
+		botonSpecificRoom.anchor.setTo(0.5,0.5)
 
-		botonJoin = game.add.button(game.world.centerX-centerBotonsX,
-				centerBotonsY + 100, 'joinSpecific', joinFuncNew, this, 2, 1, 0);
-		botonJoin.scale.setTo(0.25, 0.25)
+		botonAnyRoom = game.add.button(game.world.centerX,
+				centerBotonsY + 200, 'joinRoom', joinAnyRoom, this, 2, 1, 0);
+		botonAnyRoom.scale.setTo(0.25, 0.25)
+		botonAnyRoom.anchor.setTo(0.5,0.5)
 
-		botonJoinAny = game.add.button(game.world.centerX-centerBotonsX,
-				centerBotonsY + 200, 'joinRoom', joinFuncAny, this, 2, 1, 0);
-		botonJoinAny.scale.setTo(0.25, 0.25)
-
-		function joinFunc() {
-			var input = window.prompt("Enter room name")
+		function createRoom() {
+			var roomName = window.prompt("Enter room name")
 			
-			if (input === null){
+			if (roomName === null){
 				return
 			}
 			
-			while (input===''){
-				input = window.prompt("Enter room name")
+			while (roomName===''){
+				roomName = window.prompt("Enter room name")
 				
 			}
-			console.log("Room name:" + input)
+			console.log("Room name:" + roomName)
 			
-			let message = {
+			let createRoom = {
 				event : 'CREATE NEW ROOM',
-				room : input
+				room : roomName
 			}
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(createRoom))
 			this.ready = true;
 		}
 
-		function joinFuncNew() {
-			var input = window.prompt("Enter room name")
+		function joinSpecificRoom() {
+			var roomName = window.prompt("Enter room name")
 			
-			if (input == null){
+			if (roomName == null){
 				return
 			}
-			while (input===''){
-				input = window.prompt("Enter room name")
+			while (roomName===''){
+				roomName = window.prompt("Enter room name")
 				
 			}
-			console.log("Room name:" + input)
+			console.log("Room name:" + roomName)
 			
-			let message = {
+			let enterSpecificRoom = {
 				event : 'JOIN SPECIFIC ROOM',
-				room : input
+				room : roomName
 			}
 			
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(enterSpecificRoom))
 			this.ready = true;
 		}
 
-		function joinFuncAny() {
-			let message = {
+		function joinAnyRoom() {
+			let enterAnyRoom = {
 				event : 'JOIN ANY ROOM'
 			}
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(enterAnyRoom))
 			this.ready = true;
 		}
 

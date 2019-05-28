@@ -63,11 +63,11 @@ texture.clear();
 			if (game.global.DEBUG_MODE) {
 				console.log("[DEBUG] Joined room " + game.global.myPlayer.room);
 			}
-			let message = {
+			let numPlayers = {
 					event: 'PLAYERS',
 					room: game.global.myPlayer.room
 			}
-			game.global.socket.send(JSON.stringify(message));
+			game.global.socket.send(JSON.stringify(numPlayers));
 			if(game.global.enough_players){
 				game.state.start('roomState')
 			}

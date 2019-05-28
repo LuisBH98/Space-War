@@ -47,7 +47,7 @@ public class Spaceship extends SpaceObject {
 					Math.sin(this.getFacingAngle() * Math.PI / 180) * SPACESHIP_SPEED);
 		}
 		
-		if(this.lastMovement.thrust && this.lastMovement.fast && fuel > 0) {
+		if(this.lastMovement.thrust && this.lastMovement.fast && fuel > 10) {
 			this.incVelocity((Math.cos(this.getFacingAngle()*Math.PI/180)*SPACESHIP_SPEED)*2,
 					(Math.sin(this.getFacingAngle()*Math.PI/180)*SPACESHIP_SPEED)*2);
 		}

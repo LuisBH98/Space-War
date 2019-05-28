@@ -20,6 +20,10 @@ public class Player extends Spaceship {
 	private int ammo;
 	private int puntuacion;
 	private int fuel;
+	private final static int MIN_PUNTUACION = 0;
+	private final static int MAX_LIFE = 100;
+	private final static int MAX_FUEL = 100;
+	private final static int MAX_AMMO = 20;
 	public Lock sendMessagePlayer = new ReentrantLock();
 
 	public Player(int playerId, WebSocketSession session) {
@@ -27,11 +31,11 @@ public class Player extends Spaceship {
 		this.session = session;
 		this.shipType = this.getRandomShipType();
 		this.player_name = this.getRandomPlayerName();
-		this.life = 100;
-		this.ammo = 50;
-		this.fuel = 100;
+		this.life = MAX_LIFE;
+		this.ammo = MAX_AMMO;
+		this.fuel = MAX_FUEL;
 		this.perdedor=false;
-		this.puntuacion=0;
+		this.puntuacion=MIN_PUNTUACION;
 	}
 	
 	public int getPlayerFuel() {

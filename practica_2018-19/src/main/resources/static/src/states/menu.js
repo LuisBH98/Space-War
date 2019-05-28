@@ -45,11 +45,12 @@ Spacewar.menuState.prototype = {
 			zz[i] = Math.floor(Math.random()*1700)-100;
 		}
 		
-		playButton = game.add.button(game.world.centerX-75, game.world.centerY, 'play', enterLobbyFunc, this, 2, 1, 0);
+		playButton = game.add.button(game.world.centerX, game.world.centerY+50, 'play', enterLobbyFunc, this, 2, 1, 0);
 		playButton.scale.setTo(0.25, 0.25)
+		playButton.anchor.setTo(0.5, 0.5)
 		
 		introducirNombre= game.add.button(game.world.centerX,
-			centerBotonsY -180, 'choose_name', enterUserName, this, 2, 1, 0);
+			centerBotonsY-150, 'choose_name', enterUserName, this, 2, 1, 0);
 		introducirNombre.anchor.setTo(0.5,0.5)
 		introducirNombre.scale.setTo(0.25, 0.25)
 		
@@ -65,14 +66,14 @@ Spacewar.menuState.prototype = {
 			}
 			
 			while (name_input===''){
-				input = window.prompt("Choose a name")
+				name_input = window.prompt("Choose a name")
 				
 			}
-			let message = {
+			let newName = {
 				event : 'NEW NAME',
 				player_name: name_input,
 			}
-			game.global.socket.send(JSON.stringify(message))
+			game.global.socket.send(JSON.stringify(newName))
 		}
 	},
 	

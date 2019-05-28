@@ -20,7 +20,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 	public ConcurrentHashMap<String, SpacewarGame> salas = new ConcurrentHashMap<>();
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
-	private final static int MAX_AMMO = 50;
+	private final static int MAX_AMMO = 20;
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
@@ -28,6 +28,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private final static int MIN_PUNTUACION = 0;
 	private final static int MAX_LIFE = 100;
 	private final static int MAX_FUEL = 100;
+	private final static int FUEL_COST = 10;
+	private final static int FUEL_RECHARGE = 1;
 	
 
 	@Override
@@ -95,9 +97,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					if (salas.get(clave).available()) {
 						msg.put("event", "JOIN ROOM");
 						msg.put("room", clave);
-						player.sendMessagePlayer.lock();
 						salas.get(clave).addPlayer(player);
-						player.sendMessagePlayer.unlock();
 						addedPlayer = true;
 						break;
 					}
@@ -115,9 +115,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					if (salas.get(nombreSala).available()) {
 						msg.put("event", "JOIN ROOM");
 						msg.put("room", nombreSala);
-						player.sendMessagePlayer.lock();
 						salas.get(nombreSala).addPlayer(player);
-						player.sendMessagePlayer.unlock();
 					} else {
 						msg.put("event", "ROOMS OCCUPIED");
 						msg.put("room", nombreSala);
@@ -149,11 +147,11 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						node.path("movement").get("rotLeft").asBoolean(),
 						node.path("movement").get("rotRight").asBoolean(),
 						node.path("movement").get("fast").asBoolean());
-				if(node.path("movement").get("fast").asBoolean() && player.getPlayerFuel() > 0 && node.path("movement").get("thrust").asBoolean()) {
-					player.setPlayerFuel(player.getPlayerFuel() - 1);
+				if(node.path("movement").get("fast").asBoolean() && player.getPlayerFuel()-FUEL_COST >= 0 && node.path("movement").get("thrust").asBoolean()) {
+					player.setPlayerFuel(player.getPlayerFuel() - FUEL_COST);
 				}else{
 					if(player.getPlayerFuel() < 100 && !node.path("movement").get("fast").asBoolean()){
-						player.setPlayerFuel(player.getPlayerFuel() + 1);
+						player.setPlayerFuel(player.getPlayerFuel() + FUEL_RECHARGE);
 					}
 				}
 				if (node.path("bullet").asBoolean()) {
@@ -162,7 +160,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					salas.get(nombreSala).addProjectile(projectile.getId(), projectile);
 				}
 				if(player.getPlayerAmmo() < MAX_AMMO && node.get("recharge").asBoolean()) {
-					player.setPlayerAmmo(50);
+					player.setPlayerAmmo(MAX_AMMO);
 				}
 				break;
 			case "REMOVE ROOM":
@@ -215,7 +213,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-		player.sendMessagePlayer.lock();
 		for (String clave : salas.keySet()) {
 			if (salas.get(clave).getPlayers().contains(player)) {
 				salas.get(clave).removePlayer(player);

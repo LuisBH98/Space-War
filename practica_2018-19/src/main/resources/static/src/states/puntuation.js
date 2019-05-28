@@ -15,19 +15,15 @@ Spacewar.puntuationState.prototype = {
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Entering **PUNTUATION** state");
 		}
-		let message = {
+		let removeRoom = {
 			event: 'REMOVE ROOM',
 			room: game.global.myPlayer.room
 		}
-		game.global.socket.send(JSON.stringify(message));
-		let message2 = {
+		game.global.socket.send(JSON.stringify(removeRoom));
+		let resetVariables = {
 				event: 'RESET VARIABLES'
 		}
-		game.global.socket.send(JSON.stringify(message2));
-		console.log(game.global.myPlayer.player_name)
-		console.log(game.global.myPlayer.perdedor)
-		console.log(game.global.myPlayer.life)
-		console.log(game.global.myPlayer.puntuacion)
+		game.global.socket.send(JSON.stringify(resetVariables));
 	},
 
 	preload: function () {
